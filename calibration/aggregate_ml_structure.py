@@ -45,30 +45,29 @@ print(f"\nWrote {len(df)} rows → {OUT_CSV}")
 
 # ── Summary table ─────────────────────────────────────────────────────────────
 
-print("\n" + "=" * 72)
-print("Structural Similarity — CMA-ES vs XGBoost (Scenario 2, N=20)")
-print("=" * 72)
+print("\n" + "=" * 62)
+print("Structural Similarity — CMA-ES vs TabICL-MS (N=20)")
+print("=" * 62)
 print(f"  {'Method':<8}  {'config':<6}  {'#':>4}  {'Q':>2}  "
-      f"{'SS_rld':>8}  {'SS_angle':>8}  {'Chamfer':>8}")
-print("-" * 72)
+      f"{'SS_rld':>8}  {'SS_angle':>8}")
+print("-" * 62)
 
 for _, r in df.sort_values(["config", "sample_id", "method"]).iterrows():
     print(f"  {r['method']:<8}  {r['config']:<6}  {int(r['sample_id']):>4}  "
           f"{r['g_axial_quintile']:>2}  "
-          f"{r['ss_rld']:>+8.3f}  {r['ss_angle']:>+8.3f}  {r['chamfer_cm']:>8.3f}")
+          f"{r['ss_rld']:>+8.3f}  {r['ss_angle']:>+8.3f}")
 
-print("-" * 72)
+print("-" * 62)
 print("\nMethod means:")
 for method in ["CMA-ES", "TabICL"]:
     sub = df[df["method"] == method]
     print(f"  {method:<8}  SS_rld={sub['ss_rld'].mean():+.3f}  "
-          f"SS_angle={sub['ss_angle'].mean():+.3f}  "
-          f"Chamfer={sub['chamfer_cm'].mean():.3f} cm  (N={len(sub)})")
+          f"SS_angle={sub['ss_angle'].mean():+.3f}  (N={len(sub)})")
 
 # ── Per-quintile breakdown ────────────────────────────────────────────────────
 
 print("\nBy g_axial quintile:")
-print(f"  {'Method':<8}  {'Q':<3}  {'SS_rld':>8}  {'SS_angle':>8}  {'Chamfer':>8}  N")
+print(f"  {'Method':<8}  {'Q':<3}  {'SS_rld':>8}  {'SS_angle':>8}  N")
 for q in ["Q1", "Q2", "Q3", "Q4", "Q5"]:
     for method in ["CMA-ES", "TabICL"]:
         sub = df[(df["method"] == method) & (df["g_axial_quintile"] == q)]
@@ -76,5 +75,4 @@ for q in ["Q1", "Q2", "Q3", "Q4", "Q5"]:
             continue
         print(f"  {method:<8}  {q:<3}  "
               f"{sub['ss_rld'].mean():>+8.3f}  "
-              f"{sub['ss_angle'].mean():>+8.3f}  "
-              f"{sub['chamfer_cm'].mean():>8.3f}  {len(sub)}")
+              f"{sub['ss_angle'].mean():>+8.3f}  {len(sub)}")
