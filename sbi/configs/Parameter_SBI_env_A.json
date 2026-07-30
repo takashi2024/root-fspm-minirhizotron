@@ -1,0 +1,362 @@
+{
+  "_note": "SBI training config: tube shifted to x_from_left=56.25 to align with plant column (plants at 43.75,56.25,68.75...). Plants at y=30 produce visible roots from day ~24.",
+  "rhizobox": {
+    "H": 100.0,
+    "W": 100.0,
+    "D": 100.0,
+    "angle_from_horizontal_deg": 90.0,
+    "periodic_x": true,
+    "periodic_y": true,
+    "periodic_z": false
+  },
+  "minirhizotron": {
+    "enabled": true,
+    "tube_origin_cm": [
+      50.0,
+      21.716,
+      0.0
+    ],
+    "tube_direction": [
+      0.0,
+      0.7071067811865476,
+      -0.7071067811865476
+    ],
+    "tube_length_cm": 80.0,
+    "tube_outer_radius_cm": 3.0,
+    "skin_depth_cm": 1.0,
+    "image_along_cm": 5.0,
+    "image_arc_cm": 5.0,
+    "station_positions_cm": [
+      2.5,
+      7.5,
+      12.5,
+      17.5,
+      22.5,
+      27.5,
+      32.5,
+      37.5,
+      42.5,
+      47.5,
+      52.5,
+      57.5,
+      62.5,
+      67.5,
+      72.5
+    ],
+    "sample_step_cm": 0.1,
+    "csv_name": "tube_stations_daily.csv",
+    "camera_azimuths_deg": [
+      0.0,
+      90.0,
+      180.0,
+      270.0
+    ]
+  },
+  "species_params_files": {
+    "VD": "calibration/Parameter_VD_template.json"
+  },
+  "planting": {
+    "_note": "Config A: 4 cols (x=25.0 cm) \u00d7 8 rows (y=12.5 cm) = 32 plants = 32/m\u00b2. Tube x_from_left=50.0 cm (between rows). Tube between rows: midpoint of cols 37.5 and 62.5 (12.5 cm from each). 12\u219212.5 cm within-row for PBC. Density 32/m\u00b2.",
+    "plants": [
+      {
+        "species": "VD",
+        "pos_cm": [
+          12.5,
+          6.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          12.5,
+          18.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          12.5,
+          31.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          12.5,
+          43.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          12.5,
+          56.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          12.5,
+          68.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          12.5,
+          81.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          12.5,
+          93.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          37.5,
+          6.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          37.5,
+          18.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          37.5,
+          31.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          37.5,
+          43.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          37.5,
+          56.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          37.5,
+          68.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          37.5,
+          81.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          37.5,
+          93.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          62.5,
+          6.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          62.5,
+          18.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          62.5,
+          31.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          62.5,
+          43.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          62.5,
+          56.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          62.5,
+          68.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          62.5,
+          81.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          62.5,
+          93.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          87.5,
+          6.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          87.5,
+          18.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          87.5,
+          31.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          87.5,
+          43.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          87.5,
+          56.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          87.5,
+          68.75,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          87.5,
+          81.25,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          87.5,
+          93.75,
+          0.0
+        ]
+      }
+    ]
+  },
+  "layout_diagnostics": {
+    "enabled": true,
+    "outdir": "sbi/data/layout_diagnostics/config_A"
+  },
+  "facilitation": {
+    "enabled": false
+  },
+  "density_regulation": {
+    "enabled": false
+  },
+  "visualization_2d": {
+    "enabled": true,
+    "save_every": 10,
+    "project_to_plate": true,
+    "outdir": "calibration/__calib_tmp_mr_100cm_pbc__/out/viz2d"
+  },
+  "visualization_plate": {
+    "enabled": true,
+    "save_every": 90,
+    "_note": "save_every=90 = final day only; rendering all segments is slow inside the loop",
+    "outdir": "calibration/__calib_tmp_mr_100cm_pbc__/out/viz_plate"
+  },
+  "visible_metrics": {
+    "enabled": false
+  },
+  "visible_grid_daily": {
+    "enabled": false
+  },
+  "daily_snapshots": {
+    "enabled": false
+  },
+  "bdepth_metrics": {
+    "enabled": false
+  },
+  "simulation": {
+    "days": 90,
+    "seed": 42,
+    "save_every": 0,
+    "outdir": "sbi/data/__tmp_layout_A__/out",
+    "plot3d_outdir": "sbi/data/__tmp_layout_A__/out/plot3d",
+    "mature_branching": false,
+    "export_step_cm": 0.1
+  }
+}

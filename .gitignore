@@ -1,0 +1,24 @@
+# Large simulation / generated data
+output_*/
+__calib_tmp_*/
+calibration/experiments/
+calibration/data/
+calibration/ml_struct_tmp*/
+sbi/data/
+output_fig2_tmp/
+
+# Julia
+*.ji
+Manifest.toml
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
