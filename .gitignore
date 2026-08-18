@@ -31,7 +31,13 @@ sbi/data/combined/obs_density_analysis/
 sbi/data/combined/v1/
 
 # ── v1 data and configs (superseded by v2) ─────────────────────────────────────
-calibration/data/
+# Note: calibration/data/test_cases/warmstart_*.json ARE tracked (needed for CMA-ES S2).
+# Only ignore the v1 obs CSVs and S2W warmstarts.
+calibration/data/mr_obs_stations_*.csv
+calibration/data/test_cases/obs_*.csv
+calibration/data/test_cases/obs_multiseed_*.csv
+calibration/data/test_cases/obs_multiseed_k14_*.csv
+calibration/data/test_cases/warmstart_tabicl_*.json
 calibration/configs/test_cases/
 
 # ── Analysis figures and logs (not publication outputs) ────────────────────────

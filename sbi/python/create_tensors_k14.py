@@ -17,8 +17,8 @@ CONFIGS = ["A", "B2", "C", "D2"]
 K14     = 14
 
 for cfg in CONFIGS:
-    src = REPO / f"sbi/data/multi_seed/config_{cfg}/tensors_k20"
-    dst = REPO / f"sbi/data/multi_seed/config_{cfg}/tensors_k14"
+    src = REPO / f"sbi/data/multi_seed_v2/config_{cfg}/tensors_k20"
+    dst = REPO / f"sbi/data/multi_seed_v2/config_{cfg}/tensors_k14"
     dst.mkdir(exist_ok=True)
 
     # Load raw tensor (N, K=20, T, ns, na, nc)
