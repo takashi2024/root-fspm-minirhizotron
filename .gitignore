@@ -30,6 +30,14 @@ sbi/data/combined/calibration*/
 sbi/data/combined/obs_density_analysis/
 sbi/data/combined/v1/
 
+# ── v1 data and configs (superseded by v2) ─────────────────────────────────────
+calibration/data/
+calibration/configs/test_cases/
+
+# ── Analysis figures and logs (not publication outputs) ────────────────────────
+sbi/figures/
+sbi/logs/
+
 # ── Archive folders ────────────────────────────────────────────────────────────
 calibration/results_v1/
 calibration/configs/archive/
