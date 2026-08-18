@@ -1,4 +1,4 @@
-"""utils.py — shared utilities for the SBI CNN pipeline."""
+"""utils.py — shared utilities for the TabICL SBI pipeline."""
 
 import json
 import numpy as np
