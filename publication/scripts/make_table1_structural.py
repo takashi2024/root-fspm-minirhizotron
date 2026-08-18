@@ -1,10 +1,12 @@
 """
 make_table1_structural.py
 
-Table 1 — Full structural assessment: 6 observation conditions × 2 methods.
+Table 1 (2 mm skin depth) — Structural assessment at k=7, 2 scenarios × 2 methods.
+Only k=7 available for v2; the 6-condition table from v1 is reduced to 2 conditions.
+
 Outputs:
-  publication/figures/table1_structural.xlsx  (Excel, primary output)
-  publication/figures/table1_structural.tex   (LaTeX tabular for journal submission)
+  publication/figures/table1_structural.xlsx
+  publication/figures/table1_structural.tex
 
 Run from project root:
   python3 publication/scripts/make_table1_structural.py
@@ -16,28 +18,22 @@ import pandas as pd
 
 ROOT     = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 CALIB    = os.path.join(ROOT, "calibration")
-XLSX_OUT = os.path.join(ROOT, "publication", "figures", "table1_structural.xlsx")
-TEX_OUT  = os.path.join(ROOT, "publication", "figures", "table1_structural.tex")
+OUT_DIR  = os.path.join(ROOT, "publication", "figures")
+XLSX_OUT = os.path.join(OUT_DIR, "table1_structural.xlsx")
+TEX_OUT  = os.path.join(OUT_DIR, "table1_structural.tex")
 
-# ── Load all 6 CSVs ───────────────────────────────────────────────────────────
+os.makedirs(OUT_DIR, exist_ok=True)
+
+# ── Load v2 k=7 CSVs ─────────────────────────────────────────────────────────
 
 CSV_MAP = {
-    ("S2", 1):  (os.path.join(CALIB, "comparison_structure_metrics_s2_k1.csv"),
-                 "CMA-ES-S2",       "TabICL-MS-k1"),
-    ("S2", 7):  (os.path.join(CALIB, "comparison_structure_metrics_s2ms.csv"),
-                 "CMA-ES-S2MS",     "TabICL-MS"),
-    ("S2", 14): (os.path.join(CALIB, "comparison_structure_metrics_s2ms_k14.csv"),
-                 "CMA-ES-S2MS-k14", "TabICL-MS-k14"),
-    ("S1", 1):  (os.path.join(CALIB, "comparison_structure_metrics_s1_k1.csv"),
-                 "CMA-ES-S1",       "TabICL-MS-k1"),
-    ("S1", 7):  (os.path.join(CALIB, "comparison_structure_metrics_s1ms.csv"),
-                 "CMA-ES-S1MS",     "TabICL-MS"),
-    ("S1", 14): (os.path.join(CALIB, "comparison_structure_metrics_s1ms_k14.csv"),
-                 "CMA-ES-S1MS-k14", "TabICL-MS-k14"),
+    ("S2", 7): (os.path.join(CALIB, "comparison_structure_metrics_v2_s2ms.csv"),
+                "CMA-ES-S2MS", "TabICL-MS-v2"),
+    ("S1", 7): (os.path.join(CALIB, "comparison_structure_metrics_v2_s1ms.csv"),
+                "CMA-ES-S1MS", "TabICL-MS-v2"),
 }
 
 METRICS = ["ss_rld", "ss_angle"]
-HIGHER_BETTER = {"ss_rld": True, "ss_angle": True}
 
 rows = []
 for (scen, k), (path, cmae_label, tab_label) in CSV_MAP.items():
@@ -54,10 +50,10 @@ for (scen, k), (path, cmae_label, tab_label) in CSV_MAP.items():
 
 results_df = pd.DataFrame(rows)
 
-# ── Determine bold (best per scenario×k group) ───────────────────────────────
+# ── Determine bold (best per scenario×k) ─────────────────────────────────────
 
-results_df["bold_ss_rld"]    = False
-results_df["bold_ss_angle"]  = False
+results_df["bold_ss_rld"]   = False
+results_df["bold_ss_angle"] = False
 
 for (scen, k), grp in results_df.groupby(["scenario", "k"]):
     results_df.loc[grp["ss_rld_mean"].idxmax(),   "bold_ss_rld"]   = True
@@ -74,18 +70,17 @@ def fmt_mean_sd(mean, sd, bold=False, fmt=".3f"):
 tex_lines = [
     r"\begin{table}[htbp]",
     r"\centering",
-    r"\caption{Structural recovery across observation conditions and methods (N=20 test cases per condition). "
+    r"\caption{Structural recovery at $k$=7 with 0.2 cm skin depth (N=20 test cases for S2, N=18 for S1). "
     r"SS$_\mathrm{RLD}$: skill score for root length density; SS$_\mathrm{angle}$: skill score for crossing "
-    r"angle. Skill scores $>0$ indicate better than the null "
-    r"(mean-field) predictor. Bold: best value per row group. Values: mean $\pm$ SD.}",
-    r"\label{tab:structural_recovery}",
-    r"\begin{tabular}{llcrr}",
+    r"angle. Skill scores $>0$ indicate better than the null predictor. Bold: best per scenario. Values: mean $\pm$ SD.}",
+    r"\label{tab:structural_recovery_v2}",
+    r"\begin{tabular}{llrr}",
     r"\toprule",
-    r"Scenario & $k$ & Method & SS$_\mathrm{RLD}$ & SS$_\mathrm{angle}$ \\",
+    r"Scenario & Method & SS$_\mathrm{RLD}$ & SS$_\mathrm{angle}$ \\",
     r"\midrule",
 ]
 
-order = [("S2", 1), ("S2", 7), ("S2", 14), ("S1", 1), ("S1", 7), ("S1", 14)]
+order = [("S2", 7), ("S1", 7)]
 prev_scen = None
 
 for i, (scen, k) in enumerate(order):
@@ -99,18 +94,16 @@ for i, (scen, k) in enumerate(order):
 
     for _, row in sub.iterrows():
         method_label = "CMA-ES" if row["method"] == "CMA-ES" else "TabICL-MS"
-        rld_str  = fmt_mean_sd(row["ss_rld_mean"],   row["ss_rld_sd"],   bold=row["bold_ss_rld"])
-        ang_str  = fmt_mean_sd(row["ss_angle_mean"], row["ss_angle_sd"], bold=row["bold_ss_angle"])
+        rld_str = fmt_mean_sd(row["ss_rld_mean"],   row["ss_rld_sd"],   bold=row["bold_ss_rld"])
+        ang_str = fmt_mean_sd(row["ss_angle_mean"], row["ss_angle_sd"], bold=row["bold_ss_angle"])
 
         if first_row:
             scen_col = scen_label
-            k_col    = str(k)
             first_row = False
         else:
             scen_col = ""
-            k_col    = ""
 
-        tex_lines.append(f"  {scen_col} & {k_col} & {method_label} & {rld_str} & {ang_str} \\\\")
+        tex_lines.append(f"  {scen_col} & {method_label} & {rld_str} & {ang_str} \\\\")
 
 tex_lines += [
     r"\bottomrule",
@@ -118,14 +111,22 @@ tex_lines += [
     r"\end{table}",
 ]
 
-tex_str = "\n".join(tex_lines)
 with open(TEX_OUT, "w") as f:
-    f.write(tex_str)
+    f.write("\n".join(tex_lines) + "\n")
 print(f"Saved LaTeX → {TEX_OUT}")
+
+# Print preview
+for (scen, k), grp in results_df.groupby(["scenario", "k"]):
+    for _, row in grp.iterrows():
+        print(f"{scen} k={k} {row['method']:<10}: "
+              f"SS_rld={row['ss_rld_mean']:+.3f}±{row['ss_rld_sd']:.3f}  "
+              f"SS_angle={row['ss_angle_mean']:+.3f}±{row['ss_angle_sd']:.3f}  "
+              f"N={int(row['ss_rld_n'])}")
 
 # ── Excel table ───────────────────────────────────────────────────────────────
 
-SCEN_DISPLAY = {"S2": "S2 — elongation known", "S1": "S1 — all unknown"}
+SCEN_DISPLAY = {"S2": "S2 — elongation known (k=7, 0.2 cm)",
+                "S1": "S1 — all unknown (k=7, 0.2 cm)"}
 
 excel_rows = []
 for (scen, k) in order:
@@ -134,23 +135,23 @@ for (scen, k) in order:
     for _, row in sub.iterrows():
         method_label = "CMA-ES" if row["method"] == "CMA-ES" else "TabICL-MS"
         excel_rows.append({
-            "Scenario":      SCEN_DISPLAY[scen] if first_row else "",
-            "k":             k if first_row else "",
-            "Method":        method_label,
-            "SS_RLD (mean)": round(row["ss_rld_mean"], 3),
-            "SS_RLD (SD)":   round(row["ss_rld_sd"],   3),
+            "Scenario":        SCEN_DISPLAY[scen] if first_row else "",
+            "Method":          method_label,
+            "SS_RLD (mean)":   round(row["ss_rld_mean"],   3),
+            "SS_RLD (SD)":     round(row["ss_rld_sd"],     3),
             "SS_angle (mean)": round(row["ss_angle_mean"], 3),
             "SS_angle (SD)":   round(row["ss_angle_sd"],   3),
-            "Best SS_RLD":   row["bold_ss_rld"],
-            "Best SS_angle": row["bold_ss_angle"],
+            "N":               int(row["ss_rld_n"]),
+            "Best SS_RLD":     row["bold_ss_rld"],
+            "Best SS_angle":   row["bold_ss_angle"],
         })
         first_row = False
 
 excel_df = pd.DataFrame(excel_rows)
 
 with pd.ExcelWriter(XLSX_OUT, engine="openpyxl") as writer:
-    excel_df.to_excel(writer, index=False, sheet_name="Table1")
-    ws = writer.sheets["Table1"]
+    excel_df.to_excel(writer, index=False, sheet_name="Table1_v2")
+    ws = writer.sheets["Table1_v2"]
 
     from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
     from openpyxl.utils import get_column_letter
@@ -164,59 +165,40 @@ with pd.ExcelWriter(XLSX_OUT, engine="openpyxl") as writer:
         bottom=Side(style="thin", color="CCCCCC"),
         top=Side(style="thin", color="CCCCCC"),
     )
-    SEP_BORDER  = Border(top=Side(style="medium", color="555555"))
 
-    # Header row styling
     for cell in ws[1]:
         cell.font = HEADER_FONT
         cell.fill = HEADER_FILL
         cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
-    # Column widths
-    col_widths = [24, 6, 12, 14, 12, 16, 12, 12, 12]
+    col_widths = [30, 12, 14, 12, 16, 12, 6, 12, 12]
     for i, w in enumerate(col_widths, 1):
         ws.column_dimensions[get_column_letter(i)].width = w
 
-    # Data rows
     for row_idx, row_data in enumerate(excel_rows, start=2):
-        scen_key = "S2" if "S2" in str(row_data["Scenario"]) or (
-            row_data["Scenario"] == "" and row_idx <= 7) else "S1"
-        # Determine scenario from absolute row position
-        actual_scen = "S2" if row_idx <= 7 else "S1"
-
+        actual_scen = "S2" if row_idx <= 3 else "S1"
         for col_idx, col_name in enumerate(excel_df.columns, start=1):
             cell = ws.cell(row=row_idx, column=col_idx)
             cell.alignment = Alignment(horizontal="center", vertical="center")
             cell.border = THIN_BORDER
-
-            # Scenario background on first 3 columns
-            if col_idx <= 3:
+            if col_idx <= 2:
                 cell.fill = S2_FILL if actual_scen == "S2" else S1_FILL
-
-            # Bold best values
-            is_bold = (col_name == "SS_RLD (mean)"   and row_data["Best SS_RLD"]) or \
-                      (col_name == "SS_angle (mean)" and row_data["Best SS_angle"])
+            is_bold = ((col_name == "SS_RLD (mean)"   and row_data["Best SS_RLD"]) or
+                       (col_name == "SS_angle (mean)" and row_data["Best SS_angle"]))
             if is_bold:
                 cell.font = BOLD_FONT
 
-        # Separator line between S2 and S1 blocks
-        if row_idx == 8:
-            for col_idx in range(1, len(excel_df.columns) + 1):
-                ws.cell(row=row_idx, column=col_idx).border = SEP_BORDER
-
-    # Hide the boolean "Best" columns (cols 8-9)
     for col_idx in [8, 9]:
         ws.column_dimensions[get_column_letter(col_idx)].hidden = True
 
-    # Freeze header row
     ws.freeze_panes = "A2"
 
-    # Add a note below the table
     note_row = len(excel_rows) + 3
     ws.cell(row=note_row, column=1,
-            value="Notes: SS > 0 = better than null predictor. Bold = best per observation condition. "
-                  "N=20 test cases per condition. S2: elongation known (4 arch params calibrated). "
-                  "S1: all 8 params unknown.")
+            value="Notes: skin_depth = 0.2 cm (2 mm), k = 7 seeds. "
+                  "SS > 0 = better than null predictor. Bold = best per scenario. "
+                  "S2: elongation known, 4 arch params. S1: all 8 params unknown. "
+                  "S1 N=18 (A_497 and C_100 excluded from S1 calibration).")
     ws.cell(row=note_row, column=1).font = Font(italic=True, size=9)
     ws.merge_cells(start_row=note_row, start_column=1,
                    end_row=note_row, end_column=7)

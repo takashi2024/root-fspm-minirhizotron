@@ -1,0 +1,65 @@
+================================================================================
+Test Case Selection — Stratified Greedy Maximin Design
+================================================================================
+Total selected : 20 cases (5 per config × 4 configs)
+Configs        : A, B2, C, D2
+Algorithm      : constrained greedy maximin in 3D space {branch_angle_order1, branching_prob_order1, branching_prob_order2}
+                 stratified by g_axial quintile (1 case per quintile)
+Filter         : feasible=1, windows_with_roots >= 10
+Normalization  : pooled filtered set across all 1039 samples
+
+Parameter ranges (pooled filtered set min → max):
+  branch_angle_order1           : [40.0112, 84.8988]
+  g_axial                       : [0.0100, 0.4766]
+  branching_prob_order1         : [0.0511, 0.8998]
+  branching_prob_order2         : [0.0002, 0.8998]
+
+Selected cases:
+  #   Config  Quintile  sample_id  ba(°)    g_axial   bp_o1    bp_o2     wins
+--------------------------------------------------------------------------------
+  1   A       Q1        254        61.3     0.0105    0.454    0.438       26
+  2   A       Q2        201        40.3     0.0229    0.808    0.799       36
+  3   A       Q3        156        83.8     0.0261    0.051    0.826       27
+  4   A       Q4        408        77.8     0.0616    0.816    0.014       10
+  5   A       Q5        497        80.6     0.0711    0.827    0.836       50
+  6   B2      Q1        143        64.1     0.0101    0.615    0.487       43
+  7   B2      Q2        455        72.0     0.0204    0.071    0.813       44
+  8   B2      Q3        411        83.2     0.0339    0.220    0.186       35
+  9   B2      Q4        382        45.0     0.0582    0.054    0.318       12
+  10  B2      Q5        432        84.3     0.2316    0.703    0.853       21
+  11  C       Q1        438        62.3     0.0121    0.419    0.364       19
+  12  C       Q2        325        84.9     0.0161    0.864    0.064       20
+  13  C       Q3        100        78.7     0.0289    0.887    0.881       46
+  14  C       Q4        224        44.5     0.0674    0.745    0.816       49
+  15  C       Q5        274        84.1     0.2906    0.203    0.866       13
+  16  D2      Q1        443        60.0     0.0160    0.452    0.497       49
+  17  D2      Q2        465        81.8     0.0180    0.693    0.014       57
+  18  D2      Q3        206        41.1     0.0301    0.863    0.029       36
+  19  D2      Q4        281        83.4     0.0758    0.893    0.834       52
+  20  D2      Q5        213        80.5     0.0856    0.096    0.784       38
+--------------------------------------------------------------------------------
+
+Coverage statistics (selected 20 vs pooled filtered set):
+  branch_angle_order1           : range covered = 99.2%  mean selected=69.6944  mean all=63.6422
+  g_axial                       : range covered = 60.1%  mean selected=0.0593  mean all=0.0475
+  branching_prob_order1         : range covered = 99.2%  mean selected=0.5366  mean all=0.4814
+  branching_prob_order2         : range covered = 96.4%  mean selected=0.5359  mean all=0.4682
+
+g_axial range per quintile (across all configs):
+  Q1: 0.0101 – 0.0160  (mean wins: 34)
+  Q2: 0.0161 – 0.0229  (mean wins: 39)
+  Q3: 0.0261 – 0.0339  (mean wins: 36)
+  Q4: 0.0582 – 0.0758  (mean wins: 30)
+  Q5: 0.0711 – 0.2906  (mean wins: 30)
+
+Min pairwise distance (normalized 4D space, for separation check):
+  Config A: 0.7429
+  Config B2: 0.7153
+  Config C: 0.7555
+  Config D2: 0.7134
+  All 20    : 0.0716
+
+All 20 selected cases have windows_with_roots >= 10: True
+
+Reference: true parameter values used in current calibration experiments:
+  branch_angle_order1=80.0°  g_axial=0.05  bp_o1=0.20  bp_o2=0.30

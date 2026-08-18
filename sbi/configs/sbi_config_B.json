@@ -1,9 +1,9 @@
 {
-  "_note": "SBI pipeline config B2: same plant layout as B, tube repositioned to x=37.5 cm. rng_seed=1 matches B exactly so B2 and B cover the same parameter space — differences in visibility are due to tube position only. seeds_start=5000 gives independent stochastic realizations.",
-  "base_env_json": "sbi/configs/Parameter_SBI_env_B2.json",
+  "_note": "SBI pipeline config. Paths are relative to the repo root (Root FSPM Minirhizotron/main).",
+  "base_env_json": "sbi/configs/Parameter_SBI_env_B.json",
   "vd_template_json": "calibration/Parameter_VD_template.json",
   "n_samples": 500,
-  "seeds_start": 5000,
+  "seeds_start": 2000,
   "days": 90,
   "snapshot_days": [
     14,
@@ -21,7 +21,7 @@
   "img_height": 64,
   "img_width": 64,
   "render_step_cm": 0.05,
-  "outdir": "sbi/data/config_B2",
+  "outdir": "sbi/data/config_B",
   "n_axial_roots": 1,
   "max_order1_per_plant": 20,
   "param_names": [

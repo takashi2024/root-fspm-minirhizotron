@@ -1,24 +1,16 @@
 \begin{table}[htbp]
 \centering
-\caption{Structural recovery across observation conditions and methods (N=20 test cases per condition). SS$_\mathrm{RLD}$: skill score for root length density; SS$_\mathrm{angle}$: skill score for crossing angle; Chamfer: mean point cloud distance (cm). Skill scores $>0$ indicate better than the null (mean-field) predictor. Bold: best value per row group. Values: mean $\pm$ SD.}
-\label{tab:structural_recovery}
-\begin{tabular}{llcrrr}
+\caption{Structural recovery at $k$=7 with 0.2 cm skin depth (N=20 test cases for S2, N=18 for S1). SS$_\mathrm{RLD}$: skill score for root length density; SS$_\mathrm{angle}$: skill score for crossing angle. Skill scores $>0$ indicate better than the null predictor. Bold: best per scenario. Values: mean $\pm$ SD.}
+\label{tab:structural_recovery_v2}
+\begin{tabular}{llrr}
 \toprule
-Scenario & $k$ & Method & SS$_\mathrm{RLD}$ & SS$_\mathrm{angle}$ & Chamfer (cm) \\
+Scenario & Method & SS$_\mathrm{RLD}$ & SS$_\mathrm{angle}$ \\
 \midrule
-  S2 (elong.\ known) & 1 & CMA-ES & \textbf{-0.012 ± 0.649} & 0.113 ± 0.485 & 1.86 ± 0.64 \\
-   &  & TabICL-MS & -0.183 ± 1.453 & \textbf{0.365 ± 0.314} & \textbf{1.45 ± 0.55} \\
-  S2 (elong.\ known) & 7 & CMA-ES & 0.043 ± 0.665 & 0.264 ± 0.332 & 1.84 ± 0.71 \\
-   &  & TabICL-MS & \textbf{0.226 ± 0.867} & \textbf{0.413 ± 0.305} & \textbf{1.45 ± 0.59} \\
-  S2 (elong.\ known) & 14 & CMA-ES & 0.090 ± 0.677 & 0.165 ± 0.433 & 1.93 ± 0.73 \\
-   &  & TabICL-MS & \textbf{0.336 ± 0.591} & \textbf{0.462 ± 0.358} & \textbf{1.45 ± 0.59} \\
+  S2 (elong.\ known) & CMA-ES & -0.024 ± 0.684 & 0.101 ± 0.453 \\
+   & TabICL-MS & \textbf{0.128 ± 0.910} & \textbf{0.393 ± 0.375} \\
 \midrule
-  S1 (all unknown) & 1 & CMA-ES & \textbf{0.021 ± 0.773} & 0.128 ± 0.370 & 3.54 ± 3.45 \\
-   &  & TabICL-MS & -0.369 ± 1.470 & \textbf{0.276 ± 0.389} & \textbf{1.54 ± 0.60} \\
-  S1 (all unknown) & 7 & CMA-ES & 0.025 ± 0.632 & 0.035 ± 0.398 & 3.97 ± 4.07 \\
-   &  & TabICL-MS & \textbf{0.109 ± 1.007} & \textbf{0.343 ± 0.365} & \textbf{1.49 ± 0.62} \\
-  S1 (all unknown) & 14 & CMA-ES & 0.174 ± 0.403 & 0.077 ± 0.355 & 3.18 ± 2.46 \\
-   &  & TabICL-MS & \textbf{0.204 ± 0.785} & \textbf{0.379 ± 0.356} & \textbf{1.50 ± 0.59} \\
+  S1 (all unknown) & CMA-ES & \textbf{-0.068 ± 0.614} & -0.139 ± 0.707 \\
+   & TabICL-MS & -0.101 ± 1.195 & \textbf{0.260 ± 0.445} \\
 \bottomrule
 \end{tabular}
 \end{table}

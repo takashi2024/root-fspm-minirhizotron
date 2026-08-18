@@ -1,0 +1,102 @@
+{
+  "_note": "Calibration environment for minirhizotron workflow. 48 conventional rapeseed plants (12.5 cm row x 16 cm within-row spacing). Minirhizotron tube with 15 stations every 5 cm, four cardinal azimuths. All visualization disabled for speed.",
+
+  "rhizobox": {
+    "H": 150.0,
+    "W": 100.0,
+    "D": 100.0,
+    "angle_from_horizontal_deg": 90.0
+  },
+
+  "minirhizotron": {
+    "enabled": true,
+    "tube_origin_cm": [50.0, 20.0, 0.0],
+    "tube_direction": [0.0, 0.7071067811865476, -0.7071067811865476],
+    "tube_length_cm": 80.0,
+    "tube_outer_radius_cm": 3.0,
+    "skin_depth_cm": 1.0,
+    "image_along_cm": 5.0,
+    "image_arc_cm": 5.0,
+    "station_positions_cm": [2.5, 7.5, 12.5, 17.5, 22.5, 27.5, 32.5, 37.5, 42.5, 47.5, 52.5, 57.5, 62.5, 67.5, 72.5],
+    "sample_step_cm": 0.1,
+    "csv_name": "tube_stations_daily.csv",
+    "camera_azimuths_deg": [0.0, 90.0, 180.0, 270.0]
+  },
+
+  "species_params_files": {
+    "VD": "calibration/Parameter_VD_template.json"
+  },
+
+  "planting": {
+    "_note": "Rows at x=6.25, 18.75, 31.25, 43.75, 56.25, 68.75, 81.25, 93.75 cm. Plants at y=8, 24, 40, 56, 72, 88 cm.",
+    "plants": [
+      { "species": "VD", "pos_cm": [ 6.25,  8.0, 0.0] },
+      { "species": "VD", "pos_cm": [ 6.25, 24.0, 0.0] },
+      { "species": "VD", "pos_cm": [ 6.25, 40.0, 0.0] },
+      { "species": "VD", "pos_cm": [ 6.25, 56.0, 0.0] },
+      { "species": "VD", "pos_cm": [ 6.25, 72.0, 0.0] },
+      { "species": "VD", "pos_cm": [ 6.25, 88.0, 0.0] },
+      { "species": "VD", "pos_cm": [18.75,  8.0, 0.0] },
+      { "species": "VD", "pos_cm": [18.75, 24.0, 0.0] },
+      { "species": "VD", "pos_cm": [18.75, 40.0, 0.0] },
+      { "species": "VD", "pos_cm": [18.75, 56.0, 0.0] },
+      { "species": "VD", "pos_cm": [18.75, 72.0, 0.0] },
+      { "species": "VD", "pos_cm": [18.75, 88.0, 0.0] },
+      { "species": "VD", "pos_cm": [31.25,  8.0, 0.0] },
+      { "species": "VD", "pos_cm": [31.25, 24.0, 0.0] },
+      { "species": "VD", "pos_cm": [31.25, 40.0, 0.0] },
+      { "species": "VD", "pos_cm": [31.25, 56.0, 0.0] },
+      { "species": "VD", "pos_cm": [31.25, 72.0, 0.0] },
+      { "species": "VD", "pos_cm": [31.25, 88.0, 0.0] },
+      { "species": "VD", "pos_cm": [43.75,  8.0, 0.0] },
+      { "species": "VD", "pos_cm": [43.75, 24.0, 0.0] },
+      { "species": "VD", "pos_cm": [43.75, 40.0, 0.0] },
+      { "species": "VD", "pos_cm": [43.75, 56.0, 0.0] },
+      { "species": "VD", "pos_cm": [43.75, 72.0, 0.0] },
+      { "species": "VD", "pos_cm": [43.75, 88.0, 0.0] },
+      { "species": "VD", "pos_cm": [56.25,  8.0, 0.0] },
+      { "species": "VD", "pos_cm": [56.25, 24.0, 0.0] },
+      { "species": "VD", "pos_cm": [56.25, 40.0, 0.0] },
+      { "species": "VD", "pos_cm": [56.25, 56.0, 0.0] },
+      { "species": "VD", "pos_cm": [56.25, 72.0, 0.0] },
+      { "species": "VD", "pos_cm": [56.25, 88.0, 0.0] },
+      { "species": "VD", "pos_cm": [68.75,  8.0, 0.0] },
+      { "species": "VD", "pos_cm": [68.75, 24.0, 0.0] },
+      { "species": "VD", "pos_cm": [68.75, 40.0, 0.0] },
+      { "species": "VD", "pos_cm": [68.75, 56.0, 0.0] },
+      { "species": "VD", "pos_cm": [68.75, 72.0, 0.0] },
+      { "species": "VD", "pos_cm": [68.75, 88.0, 0.0] },
+      { "species": "VD", "pos_cm": [81.25,  8.0, 0.0] },
+      { "species": "VD", "pos_cm": [81.25, 24.0, 0.0] },
+      { "species": "VD", "pos_cm": [81.25, 40.0, 0.0] },
+      { "species": "VD", "pos_cm": [81.25, 56.0, 0.0] },
+      { "species": "VD", "pos_cm": [81.25, 72.0, 0.0] },
+      { "species": "VD", "pos_cm": [81.25, 88.0, 0.0] },
+      { "species": "VD", "pos_cm": [93.75,  8.0, 0.0] },
+      { "species": "VD", "pos_cm": [93.75, 24.0, 0.0] },
+      { "species": "VD", "pos_cm": [93.75, 40.0, 0.0] },
+      { "species": "VD", "pos_cm": [93.75, 56.0, 0.0] },
+      { "species": "VD", "pos_cm": [93.75, 72.0, 0.0] },
+      { "species": "VD", "pos_cm": [93.75, 88.0, 0.0] }
+    ]
+  },
+
+  "facilitation":       { "enabled": false },
+  "density_regulation": { "enabled": false },
+
+  "visualization_2d":   { "enabled": false },
+  "visible_metrics":    { "enabled": false },
+  "visible_grid_daily": { "enabled": false },
+  "daily_snapshots":    { "enabled": false },
+  "bdepth_metrics":     { "enabled": false },
+
+  "simulation": {
+    "days": 90,
+    "seed": 42,
+    "save_every": 0,
+    "outdir": "calibration/__calib_tmp_mr__/out",
+    "plot3d_outdir": "calibration/__calib_tmp_mr__/out/plot3d",
+    "mature_branching": false,
+    "export_step_cm": 0.1
+  }
+}

@@ -43,7 +43,7 @@ def station_depth(sta_idx):
 
 fig = plt.figure(figsize=(13, 7.0))
 gs  = fig.add_gridspec(1, 2, left=0.02, right=0.98,
-                       top=0.96, bottom=0.04, wspace=0.28,
+                       top=0.86, bottom=0.04, wspace=0.28,
                        width_ratios=[1, 1])
 
 ax_3d  = fig.add_subplot(gs[0, 0])
@@ -72,11 +72,6 @@ if len(_rows) and len(_cols):
     ]
 ax_3d.imshow(img3d)
 ax_3d.axis("off")
-ax_3d.set_title(
-    "(a)  Root system & minirhizotron tube\n"
-    "      Day 84, config B, nearest 10 plants are visualized",
-    fontsize=11, fontweight="bold", pad=4, loc="left"
-)
 
 
 # ── Panel (b): FOV station images from FovRenderer ────────────────────────────
@@ -123,21 +118,21 @@ for r, sta_idx in enumerate(STATIONS):
 ax_bl = axes_mr[-1][0]
 ax_bl.annotate("", xy=(0.55, 0.08), xytext=(0.05, 0.08),
                xycoords="axes fraction",
-               arrowprops=dict(arrowstyle="->", color="orange", lw=0.8))
-ax_bl.text(0.05, 0.14, "along tube →", transform=ax_bl.transAxes,
-           fontsize=4.5, color="orange", va="bottom")
-ax_bl.annotate("", xy=(0.05, 0.55), xytext=(0.05, 0.08),
-               xycoords="axes fraction",
-               arrowprops=dict(arrowstyle="->", color="cyan", lw=0.8))
-ax_bl.text(0.07, 0.30, "arc ↑", transform=ax_bl.transAxes,
-           fontsize=4.5, color="cyan", va="center", rotation=90)
+               arrowprops=dict(arrowstyle="->", color="orange", lw=1.2))
+ax_bl.text(0.05, 0.15, "along tube", transform=ax_bl.transAxes,
+           fontsize=8, color="orange", va="bottom")
 
-axes_mr[0][0].text(
-    -0.48, 1.20,
-    "(b)  Minirhizotron station windows (5×5 cm, sky-facing azimuth)",
-    transform=axes_mr[0][0].transAxes,
-    fontsize=11, fontweight="bold", va="bottom"
-)
+# Both panel subtitles in figure coordinates so they share the same y height
+FIG_Y = 0.975
+fig.text(0.02, FIG_Y,
+         "(a)  Root system & minirhizotron tube\n"
+         "      Day 84, config B, nearest 10 plants are visualized",
+         fontsize=11, fontweight="bold", va="top",
+         transform=fig.transFigure)
+fig.text(0.52, FIG_Y,
+         "(b)  Minirhizotron station windows (5×5 cm, sky-facing azimuth)",
+         fontsize=11, fontweight="bold", va="top",
+         transform=fig.transFigure)
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")

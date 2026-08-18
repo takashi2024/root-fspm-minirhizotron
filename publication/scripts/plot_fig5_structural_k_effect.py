@@ -1,12 +1,13 @@
 """
 plot_fig5_structural_k_effect.py
 
-Figure 5 — Effect of observation seed count (k) on 3D structural recovery metrics.
+Figure 5 — Effect of observation seed count (k) on 3D structural recovery.
 Two panels: SS_rld, SS_angle.
 Four lines: CMA-ES S2, TabICL-MS S2, CMA-ES S1, TabICL-MS S1.
+Chamfer distance excluded (not included in the paper).
 
 Run from project root:
-  python3 publication/scripts/plot_fig4_structural_k_effect.py
+  python3 publication/scripts/plot_fig5_structural_k_effect.py
 Output: publication/figures/fig5_structural_k_effect.png
 """
 
@@ -18,24 +19,24 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.lines import Line2D
 
-ROOT     = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
-CALIB    = os.path.join(ROOT, "calibration")
-FIG_OUT  = os.path.join(ROOT, "publication", "figures", "fig5_structural_k_effect.png")
+ROOT    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
+CALIB   = os.path.join(ROOT, "calibration")
+FIG_OUT = os.path.join(ROOT, "publication", "figures", "fig5_structural_k_effect.png")
 
 # ── Load data ─────────────────────────────────────────────────────────────────
 
 CSV_MAP = {
-    ("S2", 1):  (os.path.join(CALIB, "comparison_structure_metrics_s2_k1.csv"),
+    ("S2", 1):  (os.path.join(CALIB, "comparison_structure_metrics_v2_s2_k1.csv"),
                  "CMA-ES-S2",       "TabICL-MS-k1"),
-    ("S2", 7):  (os.path.join(CALIB, "comparison_structure_metrics_s2ms.csv"),
-                 "CMA-ES-S2MS",     "TabICL-MS"),
-    ("S2", 14): (os.path.join(CALIB, "comparison_structure_metrics_s2ms_k14.csv"),
+    ("S2", 7):  (os.path.join(CALIB, "comparison_structure_metrics_v2_s2ms.csv"),
+                 "CMA-ES-S2MS",     "TabICL-MS-v2"),
+    ("S2", 14): (os.path.join(CALIB, "comparison_structure_metrics_v2_s2ms_k14.csv"),
                  "CMA-ES-S2MS-k14", "TabICL-MS-k14"),
-    ("S1", 1):  (os.path.join(CALIB, "comparison_structure_metrics_s1_k1.csv"),
+    ("S1", 1):  (os.path.join(CALIB, "comparison_structure_metrics_v2_s1_k1.csv"),
                  "CMA-ES-S1",       "TabICL-MS-k1"),
-    ("S1", 7):  (os.path.join(CALIB, "comparison_structure_metrics_s1ms.csv"),
-                 "CMA-ES-S1MS",     "TabICL-MS"),
-    ("S1", 14): (os.path.join(CALIB, "comparison_structure_metrics_s1ms_k14.csv"),
+    ("S1", 7):  (os.path.join(CALIB, "comparison_structure_metrics_v2_s1ms.csv"),
+                 "CMA-ES-S1MS",     "TabICL-MS-v2"),
+    ("S1", 14): (os.path.join(CALIB, "comparison_structure_metrics_v2_s1ms_k14.csv"),
                  "CMA-ES-S1MS-k14", "TabICL-MS-k14"),
 }
 
@@ -66,9 +67,9 @@ STYLE = {
 
 PANEL = {
     "ss_rld":   dict(ylabel="SS$_{\\mathrm{RLD}}$",   title="Root length density",
-                     hline=0.0, ylim=(-0.45, 0.42)),
+                     hline=0.0, ylim=(-1.05, 0.45)),
     "ss_angle": dict(ylabel="SS$_{\\mathrm{angle}}$", title="Crossing angle",
-                     hline=0.0, ylim=(-0.05, 0.55)),
+                     hline=0.0, ylim=(-0.25, 0.55)),
 }
 
 # ── Plot ──────────────────────────────────────────────────────────────────────
@@ -80,8 +81,7 @@ x = np.array(K_VALS)
 
 for ax, met in zip(axes, METRICS):
     cfg = PANEL[met]
-    if cfg["hline"] is not None:
-        ax.axhline(cfg["hline"], color="0.6", lw=0.9, ls=":", zorder=0)
+    ax.axhline(cfg["hline"], color="0.6", lw=0.9, ls=":", zorder=0)
     for method in ["CMA-ES", "TabICL-MS"]:
         for scen in SCENARIOS:
             y  = np.array(results[scen][method][met])
@@ -118,5 +118,6 @@ fig.legend(handles=legend_handles, loc="lower center",
 fig.suptitle("Effect of observation seed count on 3D structural recovery  (N=20 test cases)",
              fontsize=11, y=0.93)
 
+os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
 print(f"Saved → {FIG_OUT}")

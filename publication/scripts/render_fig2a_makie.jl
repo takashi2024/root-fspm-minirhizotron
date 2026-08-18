@@ -25,10 +25,10 @@ include(joinpath(PROJ, "src", "Plotting.jl"))
 include(joinpath(PROJ, "src", "Config.jl"))
 include(joinpath(PROJ, "src", "Simulation.jl"))
 
-const ENV_JSON  = joinpath(PROJ, "calibration", "fig1_env_B2_143.json")
+const ENV_JSON  = joinpath(PROJ, "calibration", "fig1_env_D2_281_2mm.json")
 const OUTDIR    = joinpath(PROJ, "output_fig2_tmp", "plot3d")
 # 10 nearest plants to tube axis: column-1 plants alongside the tube y-extent
-const PLANT_IDS = 4:13
+const PLANT_IDS = 1:10
 
 mkpath(OUTDIR)
 

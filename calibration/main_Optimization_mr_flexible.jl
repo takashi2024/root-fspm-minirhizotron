@@ -212,11 +212,11 @@ end
 # ─────────────────────────────────────────────────────────────────────────────
 # Tube construction (same geometry as in existing scripts)
 # ─────────────────────────────────────────────────────────────────────────────
-function _make_tube(x_from_left_cm::Float64; W_cm::Float64=100.0, tube_origin_y_cm::Float64=20.0)
+function _make_tube(x_from_left_cm::Float64; W_cm::Float64=100.0, tube_origin_y_cm::Float64=20.0, skin_depth_cm::Float64=1.0)
     origin    = [x_from_left_cm - W_cm/2, tube_origin_y_cm, 0.0]
     direction = normalize_vec([0.0, 0.7071067811865476, -0.7071067811865476])
     return Minirhizotron(
-        true, origin, direction, 80.0, 3.0, 1.0, 5.0, 5.0,
+        true, origin, direction, 80.0, 3.0, skin_depth_cm, 5.0, 5.0,
         collect(2.5:5.0:72.5), 0.1, "tube_stations_daily.csv",
         [0.0, 90.0, 180.0, 270.0]
     )
@@ -254,6 +254,7 @@ function _run_sim_1tube(env_json_path::AbstractString,
         n_axial_roots=n_axial_roots, max_order1_per_plant=max_order1_per_plant)
 
     env = _read_json(env_json_path)
+    skin_depth_from_env = Float64(get(get(env, "minirhizotron", Dict()), "skin_depth_cm", 1.0))
     env["species_params_files"]["VD"]     = vd_cand
     env["simulation"]["seed"]             = seed
     env["simulation"]["days"]             = maximum(need_days)
@@ -267,7 +268,7 @@ function _run_sim_1tube(env_json_path::AbstractString,
     _write_json_pretty(env_path, env)
 
     cfg_sim  = load_environment_and_plants(env_path)
-    tube     = _make_tube(tube_x_from_left_cm; W_cm=box_width_cm, tube_origin_y_cm=tube_origin_y_cm)
+    tube     = _make_tube(tube_x_from_left_cm; W_cm=box_width_cm, tube_origin_y_cm=tube_origin_y_cm, skin_depth_cm=skin_depth_from_env)
     ns       = length(tube.station_positions_cm)
     na       = length(tube.camera_azimuths_deg)
     need_set        = Set(need_days)
@@ -323,6 +324,7 @@ function _run_sim_3tubes(env_json_path::AbstractString,
         n_axial_roots=n_axial_roots, max_order1_per_plant=max_order1_per_plant)
 
     env = _read_json(env_json_path)
+    skin_depth_from_env = Float64(get(get(env, "minirhizotron", Dict()), "skin_depth_cm", 1.0))
     env["species_params_files"]["VD"]     = vd_cand
     env["simulation"]["seed"]             = seed
     env["simulation"]["days"]             = maximum(need_days)
@@ -336,7 +338,7 @@ function _run_sim_3tubes(env_json_path::AbstractString,
     _write_json_pretty(env_path, env)
 
     cfg_sim  = load_environment_and_plants(env_path)
-    tubes    = [_make_tube(tx; W_cm=box_width_cm, tube_origin_y_cm=tube_origin_y_cm) for tx in tube_x_cm_3tubes]
+    tubes    = [_make_tube(tx; W_cm=box_width_cm, tube_origin_y_cm=tube_origin_y_cm, skin_depth_cm=skin_depth_from_env) for tx in tube_x_cm_3tubes]
     ns       = length(tubes[1].station_positions_cm)
     na       = length(tubes[1].camera_azimuths_deg)
     need_set        = Set(need_days)

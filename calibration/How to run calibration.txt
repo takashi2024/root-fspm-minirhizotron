@@ -1,0 +1,4 @@
+  # from repo root
+  julia calibration/generate_mock_mr_obs.jl      # creates 
+  calibration/data/mr_obs_stations.csv
+  julia calibration/main_Optimization_minirhizotron.jl  # runs calibration

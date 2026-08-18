@@ -7,14 +7,14 @@
 #   julia calibration/evaluate_ml_structure_unified.jl <mode> [tag]
 #
 # mode is one of:
-#   s2_k1    — Scenario 2, k=1 obs: CMA-ES (tc_*_s2)        + TabICL-MS-k1
-#   s2_k7    — Scenario 2, k=7 obs: CMA-ES (tc_*_s2ms)      + TabICL-MS
-#   s2_k14   — Scenario 2, k=14 obs: CMA-ES (tc_*_s2ms_k14) + TabICL-MS-k14
-#   s1_k1    — Scenario 1, k=1 obs: CMA-ES (tc_*_s1)        + TabICL-MS-k1
-#   s1_k7    — Scenario 1, k=7 obs: CMA-ES (tc_*_s1ms)      + TabICL-MS
-#   s1_k14   — Scenario 1, k=14 obs: CMA-ES (tc_*_s1ms_k14) + TabICL-MS-k14
+#   s2_k1    — Scenario 2, k=1 obs: CMA-ES (tc_v2_*_s2)        + TabICL-MS-k1
+#   s2_k7    — Scenario 2, k=7 obs: CMA-ES (tc_v2_*_s2ms)      + TabICL-MS-v2
+#   s2_k14   — Scenario 2, k=14 obs: CMA-ES (tc_v2_*_s2ms_k14) + TabICL-MS-k14
+#   s1_k1    — Scenario 1, k=1 obs: CMA-ES (tc_v2_*_s1)        + TabICL-MS-k1
+#   s1_k7    — Scenario 1, k=7 obs: CMA-ES (tc_v2_*_s1ms)      + TabICL-MS-v2
+#   s1_k14   — Scenario 1, k=14 obs: CMA-ES (tc_v2_*_s1ms_k14) + TabICL-MS-k14
 #
-# [tag]  optional — single-case mode, e.g. "tc_A_254_s2ms"
+# [tag]  optional — single-case mode, e.g. "tc_v2_A_254_s2ms"
 #        (writes per-case CSV to ml_struct_tmp_<mode>/<tag>.csv; skips aggregate)
 #
 # Notes:
@@ -56,33 +56,32 @@ struct ModeConfig
     out_csv        ::String   # final aggregated CSV filename
 end
 
-# k=7 TabICL CSV uses model="TabICL-multiseed", not "TabICL-MS"
 const TABICL_K7_CSV = joinpath("sbi", "data", "combined",
-    "test_case_eval_multiseed", "results_tabicl_multiseed.csv")
+    "test_case_eval_multiseed_v2", "results_tabicl_multiseed_v2.csv")
 const TABICL_K14_CSV = joinpath("sbi", "data", "combined",
-    "test_case_eval_multiseed_k14", "results_tabicl_multiseed_k14.csv")
+    "test_case_eval_multiseed_v2_k14", "results_tabicl_ms_v2_k14.csv")
 const TABICL_K1_CSV = joinpath("sbi", "data", "combined",
-    "test_case_eval_multiseed_k1", "results_tabicl_multiseed_k1.csv")
+    "test_case_eval_multiseed_v2_k1", "results_tabicl_ms_v2_k1.csv")
 
 const MODES = Dict(
     "s2_k1"  => ModeConfig("_s2",       TABICL_K1_CSV,  "Scen2: elong known",
                             ARCH_PARAMS, "CMA-ES-S2",        "TabICL-MS-k1",
-                            "ml_struct_tmp_s2_k1",   "comparison_structure_metrics_s2_k1.csv"),
+                            "ml_struct_tmp_v2_s2_k1",   "comparison_structure_metrics_v2_s2_k1.csv"),
     "s2_k7"  => ModeConfig("_s2ms",     TABICL_K7_CSV,  "Scen2: elong known",
-                            ARCH_PARAMS, "CMA-ES-S2MS",      "TabICL-MS",
-                            "ml_struct_tmp_s2ms",    "comparison_structure_metrics_s2ms.csv"),
+                            ARCH_PARAMS, "CMA-ES-S2MS",      "TabICL-MS-v2",
+                            "ml_struct_tmp_v2_s2ms",    "comparison_structure_metrics_v2_s2ms.csv"),
     "s2_k14" => ModeConfig("_s2ms_k14", TABICL_K14_CSV, "Scen2: elong known",
                             ARCH_PARAMS, "CMA-ES-S2MS-k14",  "TabICL-MS-k14",
-                            "ml_struct_tmp_s2ms_k14","comparison_structure_metrics_s2ms_k14.csv"),
+                            "ml_struct_tmp_v2_s2ms_k14","comparison_structure_metrics_v2_s2ms_k14.csv"),
     "s1_k1"  => ModeConfig("_s1",       TABICL_K1_CSV,  "Scen1: all unknown",
                             ALL_PARAMS,  "CMA-ES-S1",        "TabICL-MS-k1",
-                            "ml_struct_tmp_s1_k1",   "comparison_structure_metrics_s1_k1.csv"),
+                            "ml_struct_tmp_v2_s1_k1",   "comparison_structure_metrics_v2_s1_k1.csv"),
     "s1_k7"  => ModeConfig("_s1ms",     TABICL_K7_CSV,  "Scen1: all unknown",
-                            ALL_PARAMS,  "CMA-ES-S1MS",      "TabICL-MS",
-                            "ml_struct_tmp_s1ms",    "comparison_structure_metrics_s1ms.csv"),
+                            ALL_PARAMS,  "CMA-ES-S1MS",      "TabICL-MS-v2",
+                            "ml_struct_tmp_v2_s1ms",    "comparison_structure_metrics_v2_s1ms.csv"),
     "s1_k14" => ModeConfig("_s1ms_k14", TABICL_K14_CSV, "Scen1: all unknown",
                             ALL_PARAMS,  "CMA-ES-S1MS-k14",  "TabICL-MS-k14",
-                            "ml_struct_tmp_s1ms_k14","comparison_structure_metrics_s1ms_k14.csv"),
+                            "ml_struct_tmp_v2_s1ms_k14","comparison_structure_metrics_v2_s1ms_k14.csv"),
 )
 
 # ── Parse arguments ───────────────────────────────────────────────────────────
@@ -215,7 +214,7 @@ end
 
 calib_dir  = @__DIR__
 repo_dir   = dirname(calib_dir)
-tc_csv     = joinpath(calib_dir, "test_cases_selected.csv")
+tc_csv     = joinpath(calib_dir, "test_cases_selected_v2.csv")
 tc_df      = CSV.read(tc_csv, DataFrame)   # all 20 cases
 
 tabicl_csv_path = joinpath(repo_dir, MC.tabicl_csv)
@@ -224,7 +223,7 @@ tab_df_full = CSV.read(tabicl_csv_path, DataFrame)
 tab_df = filter(r -> r.scenario == MC.tabicl_scen, tab_df_full)
 @printf("TabICL rows loaded (%s): %d\n", MC.tabicl_scen, nrow(tab_df))
 
-configs_dir  = joinpath(calib_dir, "configs", "test_cases")
+configs_dir  = joinpath(calib_dir, "configs", "test_cases_v2")
 exps_dir     = joinpath(calib_dir, "experiments")
 tmp_out_dir  = joinpath(calib_dir, MC.tmp_dir)
 mkpath(tmp_out_dir)
@@ -236,7 +235,7 @@ out_rows = []
 rows_to_process = if SINGLE_TAG !== nothing
     # Derive config/sample_id from tag by stripping known suffix
     parts = split(SINGLE_TAG, "_")
-    filter(r -> "tc_$(r.config)_$(r.sample_id)$(MC.exp_suffix)" == SINGLE_TAG, eachrow(tc_df))
+    filter(r -> "tc_v2_$(r.config)_$(r.sample_id)$(MC.exp_suffix)" == SINGLE_TAG, eachrow(tc_df))
 else
     eachrow(tc_df)
 end
@@ -244,7 +243,7 @@ end
 for row in rows_to_process
     cfg_name  = row.config
     sample_id = row.sample_id
-    tag       = "tc_$(cfg_name)_$(sample_id)$(MC.exp_suffix)"
+    tag       = "tc_v2_$(cfg_name)_$(sample_id)$(MC.exp_suffix)"
 
     per_case_csv = joinpath(tmp_out_dir, "$(tag).csv")
     if isfile(per_case_csv) && SINGLE_TAG === nothing

@@ -35,7 +35,7 @@ include(joinpath(PROJ, "src", "Config.jl"))
 include(joinpath(PROJ, "src", "Simulation.jl"))
 include(joinpath(PROJ, "sbi", "julia", "FovRenderer.jl"))
 
-const ENV_JSON  = joinpath(PROJ, "calibration", "fig1_env_B2_143.json")
+const ENV_JSON  = joinpath(PROJ, "calibration", "fig1_env_D2_281_2mm.json")
 const FOV_DAYS  = Set([56, 70, 84])   # days to render (within single run)
 const FOV_STNS  = [5, 9, 13]         # 1-based station indices
 const IMG_H     = 256

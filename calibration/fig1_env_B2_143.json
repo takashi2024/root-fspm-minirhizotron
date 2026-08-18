@@ -1,0 +1,354 @@
+{
+  "rhizobox": {
+    "H": 100.0,
+    "W": 100.0,
+    "D": 100.0,
+    "angle_from_horizontal_deg": 90.0,
+    "periodic_x": true,
+    "periodic_y": true,
+    "periodic_z": false
+  },
+  "minirhizotron": {
+    "enabled": true,
+    "tube_origin_cm": [
+      37.5,
+      21.716,
+      0.0
+    ],
+    "tube_direction": [
+      0.0,
+      0.7071067811865476,
+      -0.7071067811865476
+    ],
+    "tube_length_cm": 80.0,
+    "tube_outer_radius_cm": 3.0,
+    "skin_depth_cm": 1.0,
+    "image_along_cm": 5.0,
+    "image_arc_cm": 5.0,
+    "station_positions_cm": [
+      2.5,
+      7.5,
+      12.5,
+      17.5,
+      22.5,
+      27.5,
+      32.5,
+      37.5,
+      42.5,
+      47.5,
+      52.5,
+      57.5,
+      62.5,
+      67.5,
+      72.5
+    ],
+    "sample_step_cm": 0.1,
+    "csv_name": "tube_stations_daily.csv",
+    "camera_azimuths_deg": [
+      0.0,
+      90.0,
+      180.0,
+      270.0
+    ]
+  },
+  "species_params_files": {
+    "VD": "calibration/data/test_cases/warmstart_B2_143.json"
+  },
+  "planting": {
+    "plants": [
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          3.125,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          9.375,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          15.625,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          21.875,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          28.125,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          34.375,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          40.625,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          46.875,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          53.125,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          59.375,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          65.625,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          71.875,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          78.125,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          84.375,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          90.625,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          25.0,
+          96.875,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          3.125,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          9.375,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          15.625,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          21.875,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          28.125,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          34.375,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          40.625,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          46.875,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          53.125,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          59.375,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          65.625,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          71.875,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          78.125,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          84.375,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          90.625,
+          0.0
+        ]
+      },
+      {
+        "species": "VD",
+        "pos_cm": [
+          75.0,
+          96.875,
+          0.0
+        ]
+      }
+    ]
+  },
+  "layout_diagnostics": {
+    "enabled": false
+  },
+  "facilitation": {
+    "enabled": false
+  },
+  "density_regulation": {
+    "enabled": false
+  },
+  "visualization_2d": {
+    "enabled": false
+  },
+  "visualization_plate": {
+    "enabled": false
+  },
+  "visible_metrics": {
+    "enabled": false
+  },
+  "visible_grid_daily": {
+    "enabled": false
+  },
+  "daily_snapshots": {
+    "enabled": false
+  },
+  "bdepth_metrics": {
+    "enabled": false
+  },
+  "simulation": {
+    "days": 84,
+    "seed": 42,
+    "save_every": 84,
+    "outdir": "output_fig2_tmp",
+    "plot3d_outdir": "output_fig2_tmp/plot3d",
+    "mature_branching": false,
+    "export_step_cm": 0.1,
+    "export_pointcloud": false
+  }
+}

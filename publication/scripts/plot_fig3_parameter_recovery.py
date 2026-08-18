@@ -1,15 +1,15 @@
 """
-plot_fig3_parameter_recovery_s1.py
+plot_fig3_parameter_recovery.py
 
-Figure 3 — Parameter recovery: true vs predicted for 4 architectural parameters.
+Figure 3 (2 mm skin depth) — Parameter recovery: true vs predicted for 4 architectural parameters.
 Scenario 1: all 8 parameters unknown (elongation NOT fixed).
 Layout: 2 rows × 4 columns
-  Row 1: CMA-ES S1 (k=1, all parameters unknown, cold-start)
-  Row 2: TabICL-MS S1 (k=14, all parameters unknown)
+  Row 1: CMA-ES S1MS (k=7, 0.2 cm skin depth)
+  Row 2: TabICL-MS (k=7, 0.2 cm skin depth, all parameters unknown)
 Points coloured by g_axial quintile (Q1=slow growth → Q5=fast growth).
 
 Run from project root:
-  python3 publication/scripts/plot_fig3_parameter_recovery_s1.py
+  python3 publication/scripts/plot_fig3_parameter_recovery.py
 Output: publication/figures/fig3_parameter_recovery.png
 """
 
@@ -26,10 +26,10 @@ CALIB   = os.path.join(ROOT, "calibration")
 SBI     = os.path.join(ROOT, "sbi")
 FIG_OUT = os.path.join(ROOT, "publication", "figures", "fig3_parameter_recovery.png")
 
-TC_CSV  = os.path.join(CALIB, "test_cases_selected.csv")
+TC_CSV  = os.path.join(CALIB, "test_cases_selected_v2.csv")
 TAB_CSV = os.path.join(SBI, "data", "combined",
-                        "test_case_eval_multiseed_k14",
-                        "results_tabicl_multiseed_k14.csv")
+                        "test_case_eval_multiseed_v2",
+                        "results_tabicl_multiseed_v2.csv")
 
 ARCH_PARAMS = ["branch_angle_order1", "g_axial",
                "branching_prob_order1", "branching_prob_order2"]
@@ -47,12 +47,12 @@ Q_COLORS = {"Q1": "#1a9641", "Q2": "#a6d96a", "Q3": "#ffffbf",
 Q_LABELS = {"Q1": "Q1 (slow g)",  "Q2": "Q2", "Q3": "Q3",
             "Q4": "Q4", "Q5": "Q5 (fast g)"}
 
-# ── Load CMA-ES S1 (k=1, all params unknown) ──────────────────────────────────
+# ── Load CMA-ES S1MS (k=7, skin_depth=0.2 cm) ─────────────────────────────────
 
 tc = pd.read_csv(TC_CSV)
 cmae_rows = []
 for _, r in tc.iterrows():
-    tag  = f"tc_{r['config']}_{int(r['sample_id'])}_s1"
+    tag  = f"tc_v2_{r['config']}_{int(r['sample_id'])}_s1ms"
     path = os.path.join(CALIB, "experiments", tag, "best_params.json")
     if not os.path.exists(path):
         continue
@@ -62,13 +62,13 @@ for _, r in tc.iterrows():
            "g_axial_quintile": r["g_axial_quintile"]}
     for p in ARCH_PARAMS:
         row[f"true_{p}"]  = float(r[p])
-        row[f"pred_{p}"]  = float(bp[p])
+        row[f"pred_{p}"]  = float(bp[p]) if p in bp else float("nan")
     cmae_rows.append(row)
 
 cmae_df = pd.DataFrame(cmae_rows)
-print(f"CMA-ES S1: {len(cmae_df)} test cases loaded")
+print(f"CMA-ES S1MS v2: {len(cmae_df)} test cases loaded")
 
-# ── Load TabICL-MS S1 (k=14, all params unknown) ──────────────────────────────
+# ── Load TabICL-MS S1 (k=7, all params unknown) ──────────────────────────────
 
 tab_raw = pd.read_csv(TAB_CSV)
 tab_s1  = tab_raw[tab_raw["scenario"] == "Scen1: all unknown"].copy()
@@ -89,7 +89,7 @@ for (sid, cfg), grp in tab_s1.groupby(["sample_id", "config"]):
     tab_rows.append(row)
 
 tab_df = pd.DataFrame(tab_rows)
-print(f"TabICL-MS S1: {len(tab_df)} test cases loaded")
+print(f"TabICL-MS S1 v2: {len(tab_df)} test cases loaded")
 
 # ── Plotting ──────────────────────────────────────────────────────────────────
 
@@ -98,8 +98,8 @@ fig.subplots_adjust(left=0.06, right=0.97, top=0.82, bottom=0.11,
                     hspace=0.52, wspace=0.35)
 
 ROW_CONFIGS = [
-    (cmae_df, "CMA-ES  —  S1, $k$=1  (all parameters unknown, cold-start)"),
-    (tab_df,  "TabICL-MS  —  S1, $k$=14  (all parameters unknown)"),
+    (cmae_df, "CMA-ES  —  S1, $k$=7  (all parameters unknown, 0.2 cm skin depth)"),
+    (tab_df,  "TabICL-MS  —  S1, $k$=7  (all parameters unknown, 0.2 cm skin depth)"),
 ]
 
 for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
@@ -166,7 +166,7 @@ fig.legend(handles=legend_patches, title="$g_{axial}$ quintile",
            loc="lower center", ncol=5, fontsize=9, title_fontsize=9,
            framealpha=0.9, bbox_to_anchor=(0.52, 0.01))
 
-fig.suptitle("Parameter recovery: true vs predicted  (N=20 test cases, Scenario 1 — all parameters unknown)",
+fig.suptitle("Parameter recovery: true vs predicted  (N=20 test cases, Scenario 1 — all parameters unknown, skin depth = 0.2 cm)",
              fontsize=12, y=0.97)
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)

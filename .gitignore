@@ -1,24 +1,55 @@
-# Large simulation / generated data
-output_*/
-__calib_tmp_*/
-calibration/experiments/
-calibration/data/
-calibration/ml_struct_tmp*/
-sbi/data/
-output_fig2_tmp/
+# ── Large simulation outputs ───────────────────────────────────────────────────
+# CMA-ES experiment results (per-case dirs, can be re-run)
+calibration/experiments/tc_v2_*/
+calibration/experiments/v1/
+calibration/experiments/mode_exploration/
 
-# Julia
-*.ji
+# Per-case structural evaluation tmp dirs (intermediate, auto-cleaned)
+calibration/ml_struct_tmp*/
+
+# Temporary CMA-ES working dirs
+calibration/__calib_tmp_*/
+calibration/__mock_tmp_*/
+calibration/__mock_viz_tmp__/
+calibration/ml_struct_tmp/
+calibration/ml_struct_tmp_*/
+
+# ── SBI large data ─────────────────────────────────────────────────────────────
+# Multi-seed tensors and per-sample checkpoints (large, regeneratable)
+sbi/data/multi_seed_v2/config_*/tensors/
+sbi/data/multi_seed_v2/config_*/per_sample/
+sbi/data/multi_seed_v2/config_*/per_sample_ext/
+sbi/data/multi_seed_v2/config_*/tensors_k14/
+
+# Archived v1 SBI data
+sbi/data/v1/
+
+# Combined benchmark/calibration outputs (not needed for reproduction)
+sbi/data/combined/benchmark*/
+sbi/data/combined/calibration*/
+sbi/data/combined/obs_density_analysis/
+sbi/data/combined/v1/
+
+# ── Archive folders ────────────────────────────────────────────────────────────
+calibration/results_v1/
+calibration/configs/archive/
+
+# ── Julia runtime ──────────────────────────────────────────────────────────────
+*.jl.cov
+*.jl.mem
 Manifest.toml
 
-# Python
+# ── Python ─────────────────────────────────────────────────────────────────────
 __pycache__/
 *.pyc
-.venv/
-*.egg-info/
+.pytest_cache/
 
-# macOS
+# ── SBI extension temp files ───────────────────────────────────────────────────
+sbi/data/multi_seed_v2/config_*/_tmp_ext_/
+
+# ── Draft paper files ──────────────────────────────────────────────────────────
+publication/paper_*.docx
+publication/paper_*.md
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
 .DS_Store
-
-# Logs
-*.log

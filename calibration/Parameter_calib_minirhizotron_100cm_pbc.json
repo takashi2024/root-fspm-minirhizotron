@@ -1,0 +1,147 @@
+{
+  "_note": "100x100 PBC box: W=100 cm (x, periodic), D=100 cm (y, depth from glass), H=100 cm (z, soil depth). Full 2D PBC (periodic_x + periodic_y). Tube midpoint centred at y=50 cm (origin y=21.716, tip y=78.3 cm). 8 cols x 5 rows = 40 plants at 12.5 cm x-spacing and 20 cm y-spacing; half-spacing=10 cm at both y-boundaries \u2192 cross-PBC gap = 20 cm = within-box gap.",
+  "rhizobox": {
+    "H": 100.0,
+    "W": 100.0,
+    "D": 100.0,
+    "angle_from_horizontal_deg": 90.0,
+    "periodic_x": true,
+    "periodic_y": true,
+    "periodic_z": false
+  },
+  "minirhizotron": {
+    "enabled": true,
+    "tube_origin_cm": [
+      50.0,
+      21.716,
+      0.0
+    ],
+    "tube_direction": [
+      0.0,
+      0.7071067811865476,
+      -0.7071067811865476
+    ],
+    "tube_length_cm": 80.0,
+    "tube_outer_radius_cm": 3.0,
+    "skin_depth_cm": 1.0,
+    "image_along_cm": 5.0,
+    "image_arc_cm": 5.0,
+    "station_positions_cm": [
+      2.5,
+      7.5,
+      12.5,
+      17.5,
+      22.5,
+      27.5,
+      32.5,
+      37.5,
+      42.5,
+      47.5,
+      52.5,
+      57.5,
+      62.5,
+      67.5,
+      72.5
+    ],
+    "sample_step_cm": 0.1,
+    "csv_name": "tube_stations_daily.csv",
+    "camera_azimuths_deg": [
+      0.0,
+      90.0,
+      180.0,
+      270.0
+    ]
+  },
+  "species_params_files": {
+    "VD": "calibration/Parameter_VD_template.json"
+  },
+  "planting": {
+    "_note": "8 cols at x_from_left = 6.25..93.75 cm (12.5 cm spacing, PBC-consistent: 8x12.5=100). 5 rows at y=10,30,50,70,90 cm (20 cm spacing, half-spacing=10 cm at y-boundaries: cross-PBC gap = 20 cm = within-box gap). 40 plants total.",
+    "plants": [
+      {"species": "VD", "pos_cm": [6.25, 10.0, 0.0]},
+      {"species": "VD", "pos_cm": [18.75, 10.0, 0.0]},
+      {"species": "VD", "pos_cm": [31.25, 10.0, 0.0]},
+      {"species": "VD", "pos_cm": [43.75, 10.0, 0.0]},
+      {"species": "VD", "pos_cm": [56.25, 10.0, 0.0]},
+      {"species": "VD", "pos_cm": [68.75, 10.0, 0.0]},
+      {"species": "VD", "pos_cm": [81.25, 10.0, 0.0]},
+      {"species": "VD", "pos_cm": [93.75, 10.0, 0.0]},
+      {"species": "VD", "pos_cm": [6.25, 30.0, 0.0]},
+      {"species": "VD", "pos_cm": [18.75, 30.0, 0.0]},
+      {"species": "VD", "pos_cm": [31.25, 30.0, 0.0]},
+      {"species": "VD", "pos_cm": [43.75, 30.0, 0.0]},
+      {"species": "VD", "pos_cm": [56.25, 30.0, 0.0]},
+      {"species": "VD", "pos_cm": [68.75, 30.0, 0.0]},
+      {"species": "VD", "pos_cm": [81.25, 30.0, 0.0]},
+      {"species": "VD", "pos_cm": [93.75, 30.0, 0.0]},
+      {"species": "VD", "pos_cm": [6.25, 50.0, 0.0]},
+      {"species": "VD", "pos_cm": [18.75, 50.0, 0.0]},
+      {"species": "VD", "pos_cm": [31.25, 50.0, 0.0]},
+      {"species": "VD", "pos_cm": [43.75, 50.0, 0.0]},
+      {"species": "VD", "pos_cm": [56.25, 50.0, 0.0]},
+      {"species": "VD", "pos_cm": [68.75, 50.0, 0.0]},
+      {"species": "VD", "pos_cm": [81.25, 50.0, 0.0]},
+      {"species": "VD", "pos_cm": [93.75, 50.0, 0.0]},
+      {"species": "VD", "pos_cm": [6.25, 70.0, 0.0]},
+      {"species": "VD", "pos_cm": [18.75, 70.0, 0.0]},
+      {"species": "VD", "pos_cm": [31.25, 70.0, 0.0]},
+      {"species": "VD", "pos_cm": [43.75, 70.0, 0.0]},
+      {"species": "VD", "pos_cm": [56.25, 70.0, 0.0]},
+      {"species": "VD", "pos_cm": [68.75, 70.0, 0.0]},
+      {"species": "VD", "pos_cm": [81.25, 70.0, 0.0]},
+      {"species": "VD", "pos_cm": [93.75, 70.0, 0.0]},
+      {"species": "VD", "pos_cm": [6.25, 90.0, 0.0]},
+      {"species": "VD", "pos_cm": [18.75, 90.0, 0.0]},
+      {"species": "VD", "pos_cm": [31.25, 90.0, 0.0]},
+      {"species": "VD", "pos_cm": [43.75, 90.0, 0.0]},
+      {"species": "VD", "pos_cm": [56.25, 90.0, 0.0]},
+      {"species": "VD", "pos_cm": [68.75, 90.0, 0.0]},
+      {"species": "VD", "pos_cm": [81.25, 90.0, 0.0]},
+      {"species": "VD", "pos_cm": [93.75, 90.0, 0.0]}
+    ]
+  },
+  "layout_diagnostics": {
+    "enabled": true,
+    "outdir": "calibration/__calib_tmp_mr_100cm_pbc__/out/layout_diagnostics"
+  },
+
+  "facilitation": {
+    "enabled": false
+  },
+  "density_regulation": {
+    "enabled": false
+  },
+  "visualization_2d": {
+    "enabled": true,
+    "save_every": 10,
+    "project_to_plate": true,
+    "outdir": "calibration/__calib_tmp_mr_100cm_pbc__/out/viz2d"
+  },
+  "visualization_plate": {
+    "enabled": true,
+    "save_every": 90,
+    "_note": "save_every=90 = final day only; rendering all segments is slow inside the loop",
+    "outdir": "calibration/__calib_tmp_mr_100cm_pbc__/out/viz_plate"
+  },
+  "visible_metrics": {
+    "enabled": false
+  },
+  "visible_grid_daily": {
+    "enabled": false
+  },
+  "daily_snapshots": {
+    "enabled": false
+  },
+  "bdepth_metrics": {
+    "enabled": false
+  },
+  "simulation": {
+    "days": 90,
+    "seed": 42,
+    "save_every": 0,
+    "outdir": "calibration/__calib_tmp_mr_100cm_pbc__/out",
+    "plot3d_outdir": "calibration/__calib_tmp_mr_100cm_pbc__/out/plot3d",
+    "mature_branching": false,
+    "export_step_cm": 0.1
+  }
+}

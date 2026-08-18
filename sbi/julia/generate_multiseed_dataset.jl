@@ -124,7 +124,11 @@ function main(config_path::String, K::Int)
     # Derive config tag from outdir name (e.g. "sbi/data/config_A" → "A")
     cfg_tag = replace(basename(src_outdir), "config_" => "")
 
-    outdir        = joinpath(REPO_ROOT, "sbi", "data", "multi_seed", "config_$(cfg_tag)")
+    outdir = if haskey(cfg, "multi_seed_outdir")
+        joinpath(REPO_ROOT, cfg["multi_seed_outdir"])
+    else
+        joinpath(REPO_ROOT, "sbi", "data", "multi_seed", "config_$(cfg_tag)")
+    end
     tensors_dir   = joinpath(outdir, "tensors")
     per_sample_dir = joinpath(outdir, "per_sample")
     tmp_root      = joinpath(outdir, "_tmp_")

@@ -1,0 +1,8 @@
+elongation_rate_min
+elongation_rate_max
+elongation_logistic_k
+elongation_logistic_t50
+branch_angle_order1
+g_axial
+branching_prob_order1
+branching_prob_order2

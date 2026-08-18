@@ -1,14 +1,15 @@
 """
-plot_fig3_parameter_recovery.py
+plot_fig4_parameter_recovery.py
 
-Figure 3 — Parameter recovery: true vs predicted for 4 architectural parameters.
+Figure 4 (2 mm skin depth) — Parameter recovery: true vs predicted for 4 architectural parameters.
+Scenario 2: elongation known (4 arch params calibrated).
 Layout: 2 rows × 4 columns
-  Row 1: CMA-ES S2 (k=1, elongation known, cold-start)
-  Row 2: TabICL-MS S2 (k=14, elongation known)
+  Row 1: CMA-ES S2MS (k=7, 0.2 cm skin depth)
+  Row 2: TabICL-MS (k=7, 0.2 cm skin depth, elongation known)
 Points coloured by g_axial quintile (Q1=slow growth → Q5=fast growth).
 
 Run from project root:
-  python3 publication/scripts/plot_fig3_parameter_recovery.py
+  python3 publication/scripts/plot_fig4_parameter_recovery.py
 Output: publication/figures/fig4_parameter_recovery.png
 """
 
@@ -25,10 +26,10 @@ CALIB   = os.path.join(ROOT, "calibration")
 SBI     = os.path.join(ROOT, "sbi")
 FIG_OUT = os.path.join(ROOT, "publication", "figures", "fig4_parameter_recovery.png")
 
-TC_CSV  = os.path.join(CALIB, "test_cases_selected.csv")
+TC_CSV  = os.path.join(CALIB, "test_cases_selected_v2.csv")
 TAB_CSV = os.path.join(SBI, "data", "combined",
-                        "test_case_eval_multiseed_k14",
-                        "results_tabicl_multiseed_k14.csv")
+                        "test_case_eval_multiseed_v2",
+                        "results_tabicl_multiseed_v2.csv")
 
 ARCH_PARAMS = ["branch_angle_order1", "g_axial",
                "branching_prob_order1", "branching_prob_order2"]
@@ -46,12 +47,12 @@ Q_COLORS = {"Q1": "#1a9641", "Q2": "#a6d96a", "Q3": "#ffffbf",
 Q_LABELS = {"Q1": "Q1 (slow g)",  "Q2": "Q2", "Q3": "Q3",
             "Q4": "Q4", "Q5": "Q5 (fast g)"}
 
-# ── Load CMA-ES S2 (k=1) ─────────────────────────────────────────────────────
+# ── Load CMA-ES S2MS (k=7, skin_depth=0.2 cm) ─────────────────────────────────
 
 tc = pd.read_csv(TC_CSV)
 cmae_rows = []
 for _, r in tc.iterrows():
-    tag  = f"tc_{r['config']}_{int(r['sample_id'])}_s2"
+    tag  = f"tc_v2_{r['config']}_{int(r['sample_id'])}_s2ms"
     path = os.path.join(CALIB, "experiments", tag, "best_params.json")
     if not os.path.exists(path):
         continue
@@ -61,12 +62,13 @@ for _, r in tc.iterrows():
            "g_axial_quintile": r["g_axial_quintile"]}
     for p in ARCH_PARAMS:
         row[f"true_{p}"]  = float(r[p])
-        row[f"pred_{p}"]  = float(bp[p])
+        row[f"pred_{p}"]  = float(bp[p]) if p in bp else float("nan")
     cmae_rows.append(row)
 
 cmae_df = pd.DataFrame(cmae_rows)
+print(f"CMA-ES S2MS v2: {len(cmae_df)} test cases loaded")
 
-# ── Load TabICL-MS S2 (k=14) ─────────────────────────────────────────────────
+# ── Load TabICL-MS S2 (k=7, elongation known) ────────────────────────────────
 
 tab_raw = pd.read_csv(TAB_CSV)
 tab_s2  = tab_raw[tab_raw["scenario"] == "Scen2: elong known"].copy()
@@ -74,8 +76,9 @@ tab_s2  = tab_raw[tab_raw["scenario"] == "Scen2: elong known"].copy()
 tab_rows = []
 for (sid, cfg), grp in tab_s2.groupby(["sample_id", "config"]):
     row = {"config": cfg, "sample_id": int(sid)}
-    # g_axial_quintile from tc
     tc_row = tc[(tc["sample_id"] == int(sid)) & (tc["config"] == cfg)]
+    if len(tc_row) == 0:
+        continue
     row["g_axial_quintile"] = tc_row["g_axial_quintile"].values[0]
     for p in ARCH_PARAMS:
         prow = grp[grp["parameter"] == p]
@@ -86,6 +89,7 @@ for (sid, cfg), grp in tab_s2.groupby(["sample_id", "config"]):
     tab_rows.append(row)
 
 tab_df = pd.DataFrame(tab_rows)
+print(f"TabICL-MS S2 v2: {len(tab_df)} test cases loaded")
 
 # ── Plotting ──────────────────────────────────────────────────────────────────
 
@@ -94,8 +98,8 @@ fig.subplots_adjust(left=0.06, right=0.97, top=0.82, bottom=0.11,
                     hspace=0.52, wspace=0.35)
 
 ROW_CONFIGS = [
-    (cmae_df, "CMA-ES  —  S2, $k$=1  (elongation known, cold-start)"),
-    (tab_df,  "TabICL-MS  —  S2, $k$=14  (elongation known)"),
+    (cmae_df, "CMA-ES  —  S2, $k$=7  (elongation known, 0.2 cm skin depth)"),
+    (tab_df,  "TabICL-MS  —  S2, $k$=7  (elongation known, 0.2 cm skin depth)"),
 ]
 
 for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
@@ -113,7 +117,6 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
         pred_vals = df[pred_col].values
         mae = np.nanmean(np.abs(pred_vals - true_vals))
 
-        # axis range with 5% padding
         lo = min(np.nanmin(true_vals), np.nanmin(pred_vals))
         hi = max(np.nanmax(true_vals), np.nanmax(pred_vals))
         pad = (hi - lo) * 0.07
@@ -125,7 +128,6 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
                        color=Q_COLORS.get(r["g_axial_quintile"], "gray"),
                        edgecolors="0.25", linewidths=0.5, s=55, zorder=3)
 
-        # MAE label
         if param == "branch_angle_order1":
             mae_str = f"MAE = {mae:.1f}°"
         elif param == "g_axial":
@@ -145,7 +147,6 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
         title = f"{PARAM_LABELS[param]}\n{mae_str}"
         ax.set_title(title, fontsize=9, pad=4)
 
-    # Row label as a shaded banner above the leftmost panel
     ax0 = axes[row_idx, 0]
     ax0.set_ylabel("Predicted", fontsize=9)
     ax0.annotate(row_label,
@@ -165,7 +166,7 @@ fig.legend(handles=legend_patches, title="$g_{axial}$ quintile",
            loc="lower center", ncol=5, fontsize=9, title_fontsize=9,
            framealpha=0.9, bbox_to_anchor=(0.52, 0.01))
 
-fig.suptitle("Parameter recovery: true vs predicted  (N=20 test cases, Scenario 2)",
+fig.suptitle("Parameter recovery: true vs predicted  (N=20 test cases, Scenario 2 — elongation known, skin depth = 0.2 cm)",
              fontsize=12, y=0.97)
 
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")

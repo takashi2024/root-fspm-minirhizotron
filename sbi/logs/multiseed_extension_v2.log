@@ -1,0 +1,276 @@
+=======================================================
+Multi-seed v2 extension  K_ext=7  (total K=14)  threads=6
+Configs: 4
+Started: Thu Aug  6 10:14:17 CEST 2026
+=======================================================
+
+>>> Config: sbi/configs_v2/sbi_config_A_v2.json  (Thu Aug  6 10:14:17 CEST 2026)
+=================================================================
+Multi-seed Dataset Extender
+  Config tag    : A
+  Orig seeds    : K=7  [7001, 7002, 7003, 7004, 7005, 7006, 7007]
+  Ext  seeds    : K=7  [7008, 7009, 7010, 7011, 7012, 7013, 7014]
+  Total K       : 14
+  Threads       : 6
+  ms_dir        : /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/data/multi_seed_v2/config_A
+=================================================================
+
+Samples to extend: 323
+
+[2/3] Simulating extension seeds  (K_ext=7 × N=323)...
+      Checkpoints → /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/data/multi_seed_v2/config_A/per_sample_ext
+
+  [1/323] s0183 done
+
+[52913] signal (15): Terminated: 15
+in expression starting at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:303
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0)
+__psynch_cvwait at /usr/lib/system/libsystem_kernel.dylib (unknown line)
+unknown function (ip: 0x0)
+maybe_collect at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:940 [inlined]
+jl_gc_pool_alloc_inner at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1293 [inlined]
+jl_gc_pool_alloc_noinline at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1350 [inlined]
+jl_gc_alloc_ at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia_internal.h:478
+_new_array_ at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:134
+_new_array at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:198
+ijl_alloc_array_1d at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:436
+Array at ./boot.jl:477 [inlined]
+Array at ./boot.jl:486 [inlined]
+Array at ./boot.jl:494 [inlined]
+similar at ./abstractarray.jl:876 [inlined]
+similar at ./abstractarray.jl:875 [inlined]
+similar at ./broadcast.jl:224 [inlined]
+similar at ./broadcast.jl:223 [inlined]
+copy at ./broadcast.jl:928 [inlined]
+materialize at ./broadcast.jl:903 [inlined]
+_tube_project at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/MetricsAndOutput.jl:695 [inlined]
+tube_station_azimuth_angles_cm at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/MetricsAndOutput.jl:894
+_extract_summary at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/SimRunner.jl:104
+#run_one_sample_seed#71 at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:93
+run_one_sample_seed at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:53
+unknown function (ip: 0x16f5300af)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+macro expansion at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:215 [inlined]
+#145#threadsfor_fun#72 at ./threadingconstructs.jl:215
+#145#threadsfor_fun at ./threadingconstructs.jl:182 [inlined]
+#1 at ./threadingconstructs.jl:154
+unknown function (ip: 0x154d08063)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+jl_apply at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia.h:1982 [inlined]
+start_task at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/task.c:1256
+unknown function (ip: 0x0)
+gc_sweep_page at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1426 [inlined]
+gc_sweep_pool_page at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1501 [inlined]
+gc_sweep_pool at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1587
+_jl_gc_collect at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:3382
+ijl_gc_collect at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:3524
+maybe_collect at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:937 [inlined]
+jl_gc_pool_alloc_inner at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1293 [inlined]
+jl_gc_pool_alloc_noinline at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1350 [inlined]
+jl_gc_alloc_ at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia_internal.h:478
+_new_array_ at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:134
+_new_array at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:198
+ijl_alloc_array_1d at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:436
+Array at ./boot.jl:477 [inlined]
+Array at ./boot.jl:486 [inlined]
+Array at ./boot.jl:494 [inlined]
+similar at ./abstractarray.jl:876 [inlined]
+similar at ./abstractarray.jl:875 [inlined]
+similar at ./broadcast.jl:224 [inlined]
+similar at ./broadcast.jl:223 [inlined]
+copy at ./broadcast.jl:928 [inlined]
+materialize at ./broadcast.jl:903 [inlined]
+tube_station_azimuth_lengths_cm at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/MetricsAndOutput.jl:819
+_extract_summary at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/SimRunner.jl:103
+#run_one_sample_seed#71 at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:93
+run_one_sample_seed at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:53
+unknown function (ip: 0x16f5300af)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+macro expansion at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:215 [inlined]
+#145#threadsfor_fun#72 at ./threadingconstructs.jl:215
+#145#threadsfor_fun at ./threadingconstructs.jl:182 [inlined]
+#1 at ./threadingconstructs.jl:154
+unknown function (ip: 0x154d08063)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+jl_apply at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia.h:1982 [inlined]
+start_task at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/task.c:1256
+unknown function (ip: 0x0)
+_mapreduce at ./reduce.jl:428
+_mapreduce_dim at ./reducedim.jl:367 [inlined]
+#mapreduce#821 at ./reducedim.jl:359 [inlined]
+mapreduce at ./reducedim.jl:359 [inlined]
+#_sum#831 at ./reducedim.jl:1017 [inlined]
+_sum at ./reducedim.jl:1017 [inlined]
+#sum#829 at ./reducedim.jl:1013 [inlined]
+sum at ./reducedim.jl:1013 [inlined]
+_norm at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/Geometry.jl:7 [inlined]
+_tube_project at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/MetricsAndOutput.jl:697 [inlined]
+tube_station_azimuth_angles_cm at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/MetricsAndOutput.jl:894
+_extract_summary at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/SimRunner.jl:104
+#run_one_sample_seed#71 at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:93
+run_one_sample_seed at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:53
+unknown function (ip: 0x16f5300af)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+macro expansion at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:215 [inlined]
+#145#threadsfor_fun#72 at ./threadingconstructs.jl:215
+#145#threadsfor_fun at ./threadingconstructs.jl:182 [inlined]
+#1 at ./threadingconstructs.jl:154
+unknown function (ip: 0x154d08063)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+jl_apply at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia.h:1982 [inlined]
+start_task at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/task.c:1256
+unknown function (ip: 0x0)
+_mapreduce at ./reduce.jl:428
+_mapreduce_dim at ./reducedim.jl:367 [inlined]
+#mapreduce#821 at ./reducedim.jl:359 [inlined]
+mapreduce at ./reducedim.jl:359 [inlined]
+#_sum#831 at ./reducedim.jl:1017 [inlined]
+_sum at ./reducedim.jl:1017 [inlined]
+#sum#829 at ./reducedim.jl:1013 [inlined]
+sum at ./reducedim.jl:1013 [inlined]
+_norm at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/Geometry.jl:7 [inlined]
+_tube_project at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/MetricsAndOutput.jl:697 [inlined]
+tube_station_azimuth_lengths_cm at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/MetricsAndOutput.jl:820
+_extract_summary at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/SimRunner.jl:103
+#run_one_sample_seed#71 at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:93
+run_one_sample_seed at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:53
+unknown function (ip: 0x16f5300af)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+macro expansion at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:215 [inlined]
+#145#threadsfor_fun#72 at ./threadingconstructs.jl:215
+#145#threadsfor_fun at ./threadingconstructs.jl:182 [inlined]
+#1 at ./threadingconstructs.jl:154
+unknown function (ip: 0x154d08063)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+jl_apply at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia.h:1982 [inlined]
+start_task at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/task.c:1256
+unknown function (ip: 0x0)
+maybe_collect at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:940 [inlined]
+jl_gc_pool_alloc_inner at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1293 [inlined]
+jl_gc_pool_alloc_noinline at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1350 [inlined]
+jl_gc_alloc_ at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia_internal.h:478
+_new_array_ at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:134
+_new_array at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:198
+ijl_alloc_array_1d at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:436
+Array at ./boot.jl:477 [inlined]
+Array at ./boot.jl:486 [inlined]
+Array at ./boot.jl:494 [inlined]
+similar at ./abstractarray.jl:876 [inlined]
+similar at ./abstractarray.jl:875 [inlined]
+similar at ./broadcast.jl:224 [inlined]
+similar at ./broadcast.jl:223 [inlined]
+copy at ./broadcast.jl:928 [inlined]
+materialize at ./broadcast.jl:903 [inlined]
+tube_station_azimuth_lengths_cm at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/MetricsAndOutput.jl:812
+_extract_summary at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/SimRunner.jl:103
+#run_one_sample_seed#71 at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:93
+run_one_sample_seed at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:53
+unknown function (ip: 0x16f5300af)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+macro expansion at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:215 [inlined]
+#145#threadsfor_fun#72 at ./threadingconstructs.jl:215
+#145#threadsfor_fun at ./threadingconstructs.jl:182 [inlined]
+#1 at ./threadingconstructs.jl:154
+unknown function (ip: 0x154d08063)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+jl_apply at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia.h:1982 [inlined]
+start_task at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/task.c:1256
+unknown function (ip: 0x0)
+maybe_collect at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:940 [inlined]
+jl_gc_pool_alloc_inner at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1293 [inlined]
+jl_gc_pool_alloc_noinline at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gc.c:1350 [inlined]
+jl_gc_alloc_ at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia_internal.h:478
+_new_array_ at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:134
+_new_array at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:198
+ijl_alloc_array_1d at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/array.c:436
+Array at ./boot.jl:477 [inlined]
+Array at ./boot.jl:486 [inlined]
+Array at ./boot.jl:494 [inlined]
+similar at ./abstractarray.jl:876 [inlined]
+similar at ./abstractarray.jl:875 [inlined]
+similar at ./broadcast.jl:224 [inlined]
+similar at ./broadcast.jl:223 [inlined]
+copy at ./broadcast.jl:928 [inlined]
+materialize at ./broadcast.jl:903 [inlined]
+tube_station_azimuth_lengths_cm at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/src/MetricsAndOutput.jl:812
+_extract_summary at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/SimRunner.jl:103
+#run_one_sample_seed#71 at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:93
+run_one_sample_seed at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:53
+unknown function (ip: 0x16f5300af)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+macro expansion at /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/julia/extend_multiseed_dataset.jl:215 [inlined]
+#145#threadsfor_fun#72 at ./threadingconstructs.jl:215
+#145#threadsfor_fun at ./threadingconstructs.jl:182 [inlined]
+#1 at ./threadingconstructs.jl:154
+unknown function (ip: 0x154d08063)
+_jl_invoke at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:0 [inlined]
+ijl_apply_generic at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/gf.c:3077
+jl_apply at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/./julia.h:1982 [inlined]
+start_task at /Users/julia/.julia/scratchspaces/a66863c6-20e8-4ff4-8a62-49f30b1f605e/agent-cache/default-honeycrisp-XC9YQX9HH2.0/build/default-honeycrisp-XC9YQX9HH2-0/julialang/julia-release-1-dot-10/src/task.c:1256
+unknown function (ip: 0x0)
+Allocations: 544246229 (Pool: 544215295; Big: 30934); GC: 145
+<<< Done: sbi/configs_v2/sbi_config_A_v2.json  (Thu Aug  6 10:17:27 CEST 2026)
+
+>>> Config: sbi/configs_v2/sbi_config_B2_v2.json  (Thu Aug  6 10:17:27 CEST 2026)
+=================================================================
+Multi-seed Dataset Extender
+  Config tag    : B2
+  Orig seeds    : K=7  [7001, 7002, 7003, 7004, 7005, 7006, 7007]
+  Ext  seeds    : K=7  [7008, 7009, 7010, 7011, 7012, 7013, 7014]
+  Total K       : 14
+  Threads       : 6
+  ms_dir        : /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/data/multi_seed_v2/config_B2
+=================================================================
+
+Samples to extend: 304
+
+[2/3] Simulating extension seeds  (K_ext=7 × N=304)...
+      Checkpoints → /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/data/multi_seed_v2/config_B2/per_sample_ext
+
+<<< Done: sbi/configs_v2/sbi_config_B2_v2.json  (Thu Aug  6 10:17:40 CEST 2026)
+
+>>> Config: sbi/configs_v2/sbi_config_C_v2.json  (Thu Aug  6 10:17:40 CEST 2026)
+=================================================================
+Multi-seed Dataset Extender
+  Config tag    : C
+  Orig seeds    : K=7  [7001, 7002, 7003, 7004, 7005, 7006, 7007]
+  Ext  seeds    : K=7  [7008, 7009, 7010, 7011, 7012, 7013, 7014]
+  Total K       : 14
+  Threads       : 6
+  ms_dir        : /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/data/multi_seed_v2/config_C
+=================================================================
+<<< Done: sbi/configs_v2/sbi_config_C_v2.json  (Thu Aug  6 10:17:53 CEST 2026)
+
+>>> Config: sbi/configs_v2/sbi_config_D2_v2.json  (Thu Aug  6 10:17:53 CEST 2026)
+=================================================================
+Multi-seed Dataset Extender
+  Config tag    : D2
+  Orig seeds    : K=7  [7001, 7002, 7003, 7004, 7005, 7006, 7007]
+  Ext  seeds    : K=7  [7008, 7009, 7010, 7011, 7012, 7013, 7014]
+  Total K       : 14
+  Threads       : 6
+  ms_dir        : /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/data/multi_seed_v2/config_D2
+=================================================================
+
+Samples to extend: 327
+
+[2/3] Simulating extension seeds  (K_ext=7 × N=327)...
+      Checkpoints → /Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/data/multi_seed_v2/config_D2/per_sample_ext
+
+<<< Done: sbi/configs_v2/sbi_config_D2_v2.json  (Thu Aug  6 10:18:23 CEST 2026)
+
+=======================================================
+All configs complete: Thu Aug  6 10:18:23 CEST 2026
+=======================================================

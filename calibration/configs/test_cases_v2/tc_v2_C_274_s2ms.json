@@ -1,0 +1,40 @@
+{
+  "tube_setup": "1tube",
+  "calibration_seeds": [
+    11,
+    22,
+    99,
+    88,
+    33,
+    55,
+    77,
+    7,
+    13,
+    42,
+    66,
+    91
+  ],
+  "maxiter": 100,
+  "sigma0": 0.1,
+  "grid_n_axial": [
+    1
+  ],
+  "grid_max_order1": [
+    20
+  ],
+  "calibration_objective": "replicate_seed_average",
+  "calibration_params": [
+    "branch_angle_order1",
+    "g_axial",
+    "branching_prob_order1",
+    "branching_prob_order2"
+  ],
+  "objective_config": {
+    "w_angle_mean": 0.3,
+    "angle_normalize_deg": 45.0
+  },
+  "env_json": "/Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/configs_v2/Parameter_SBI_env_C_v2.json",
+  "obs_csv_1tube": "/Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/calibration/data_v2/test_cases/obs_multiseed_C_274.csv",
+  "warm_start_json": "/Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/calibration/data/test_cases/warmstart_C_274.json",
+  "experiment_tag": "tc_v2_C_274_s2ms"
+}

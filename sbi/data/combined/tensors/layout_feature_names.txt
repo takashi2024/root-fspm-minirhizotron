@@ -1,0 +1,8 @@
+row_spacing_cm
+within_row_spacing_cm
+density_per_m2
+box_depth_cm
+tube_x_cm
+tube_to_nearest_row_cm
+n_rows
+n_plants_per_row
