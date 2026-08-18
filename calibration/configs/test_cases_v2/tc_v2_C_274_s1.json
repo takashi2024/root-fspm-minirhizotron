@@ -27,7 +27,7 @@
     "w_angle_mean": 0.3,
     "angle_normalize_deg": 45.0
   },
-  "env_json": "/Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/configs_v2/Parameter_SBI_env_C_v2.json",
+  "env_json": "../sbi/configs_v2/Parameter_SBI_env_C_v2.json",
   "calibration_params": [
     "elongation_rate_min",
     "elongation_rate_max",
@@ -38,7 +38,7 @@
     "branching_prob_order1",
     "branching_prob_order2"
   ],
-  "obs_csv_1tube": "/Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/calibration/data_v2/test_cases/obs_k1_C_274.csv",
-  "warm_start_json": "/Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/calibration/Parameter_VD_template.json",
+  "obs_csv_1tube": "data_v2/test_cases/obs_k1_C_274.csv",
+  "warm_start_json": "Parameter_VD_template.json",
   "experiment_tag": "tc_v2_C_274_s1"
 }

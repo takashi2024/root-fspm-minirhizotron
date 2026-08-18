@@ -27,6 +27,10 @@ TEMPLATE    = os.path.join(CALIB_DIR, "Parameter_VD_template.json")
 
 os.makedirs(OUT_DIR, exist_ok=True)
 
+def rel(p):
+    """Path relative to CALIB_DIR — Julia resolves via joinpath(@__DIR__, ...)."""
+    return os.path.relpath(p, CALIB_DIR)
+
 EXCLUDED = {("A", 497), ("C", 100)}
 
 CALIBRATION_SEEDS = [11, 22, 99, 88, 33, 55, 77, 7, 13, 42, 66, 91]
@@ -72,9 +76,9 @@ for _, tc in tc_18.iterrows():
             "w_angle_mean":        0.3,
             "angle_normalize_deg": 45.0,
         },
-        "env_json":      ENV_JSON_V2[cfg],
-        "obs_csv_1tube": obs_csv,
-        "warm_start_json": TEMPLATE,
+        "env_json":        rel(ENV_JSON_V2[cfg]),
+        "obs_csv_1tube":   rel(obs_csv),
+        "warm_start_json": rel(TEMPLATE),
         "experiment_tag": tag,
     }
 

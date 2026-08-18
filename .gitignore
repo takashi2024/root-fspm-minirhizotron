@@ -95,7 +95,8 @@ calibration/*.log
 calibration/calibration_mode_findings.md
 calibration/convergence_analysis_report.md
 calibration/ParameterVD_*.json
-calibration/Parameter_VD_*.json
+calibration/Parameter_VD_high_branch.json
+calibration/Parameter_VD_low_branch.json
 calibration/Parameter_calib_*.json
 calibration/fig1_env_B2_143.json
 calibration/fig1_env_C274.json

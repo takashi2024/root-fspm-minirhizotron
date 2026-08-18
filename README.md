@@ -140,15 +140,7 @@ bash calibration/run_test_cases_v2_s1ms.sh    # S1, k=7
 bash calibration/run_test_cases_v2_s1ms_k14.sh  # S1, k=14
 ```
 
-Each test case takes 2–8 hours on a single CPU core. CMA-ES configuration JSONs are in `calibration/configs/test_cases_v2/`.
-
-> **Note for users on a different machine**: the committed config JSONs contain absolute paths specific to the original machine. Before running CMA-ES, regenerate them with your local paths:
-> ```bash
-> python3 calibration/generate_test_case_configs_k1_k14_v2.py
-> python3 calibration/generate_test_case_configs_s2ms_v2.py
-> python3 calibration/generate_test_case_configs_s1ms_v2.py
-> ```
-> This overwrites the 120 config JSONs with paths correct for your machine.
+Each test case takes 2–8 hours on a single CPU core. CMA-ES configuration JSONs are in `calibration/configs/test_cases_v2/` and use repo-relative paths, so they work on any machine without modification.
 
 ---
 

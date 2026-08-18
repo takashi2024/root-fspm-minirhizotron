@@ -25,6 +25,10 @@ WS_DIR      = os.path.join(CALIB_DIR, "data", "test_cases")
 
 os.makedirs(OUT_DIR, exist_ok=True)
 
+def rel(p):
+    """Path relative to CALIB_DIR — Julia resolves via joinpath(@__DIR__, ...)."""
+    return os.path.relpath(p, CALIB_DIR)
+
 CALIBRATION_SEEDS = [11, 22, 99, 88, 33, 55, 77, 7, 13, 42, 66, 91]
 
 PARAMS_S2 = [
@@ -83,7 +87,7 @@ for _, tc in tc_df.iterrows():
         "grid_max_order1": [20],
         "calibration_objective": "replicate_seed_average",
         "objective_config": OBJECTIVE_CONFIG,
-        "env_json": env_json,
+        "env_json": rel(env_json),
     }
 
     variants = [
@@ -99,8 +103,8 @@ for _, tc in tc_df.iterrows():
         cfg_dict = {
             **base,
             "calibration_params": params,
-            "obs_csv_1tube": obs_csv,
-            "warm_start_json": warm_start,
+            "obs_csv_1tube":   rel(obs_csv),
+            "warm_start_json": rel(warm_start),
             "experiment_tag": tag,
         }
         out_path = os.path.join(OUT_DIR, f"{tag}.json")
