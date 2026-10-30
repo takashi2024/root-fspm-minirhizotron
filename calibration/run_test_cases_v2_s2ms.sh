@@ -8,7 +8,7 @@
 #   bash calibration/run_test_cases_v2_s2ms.sh [N_WORKERS]
 # N_WORKERS defaults to 6.
 
-JULIA=/Applications/Julia-1.10.app/Contents/Resources/julia/bin/julia
+JULIA=/c/Users/au758739/AppData/Local/Programs/Julia-1.11.2/bin/julia
 MAIN=calibration/main_Optimization_mr_flexible.jl
 CONFIGS=(calibration/configs/test_cases_v2/tc_v2_*_s2ms.json)
 N_WORKERS=${1:-6}

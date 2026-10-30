@@ -34,7 +34,7 @@ end
 
 function _read_json(path::AbstractString)
     _JSON_AVAILABLE[] || error("This script needs JSON.jl. Install once with: julia -e \"import Pkg; Pkg.add(\\\"JSON\\\")\" ")
-    return JSON.parse(read(path, String))
+    return Dict(JSON.parse(read(path, String)))
 end
 
 # ----------------------------

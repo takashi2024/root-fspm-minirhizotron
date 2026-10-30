@@ -79,7 +79,7 @@ include(joinpath(@__DIR__, "..", "src", "Simulation.jl"))
 # JSON helpers
 # ─────────────────────────────────────────────────────────────────────────────
 _read_json(path::AbstractString) =
-    open(path, "r") do io; JSON.parse(String(read(io))); end
+    open(path, "r") do io; Dict(JSON.parse(String(read(io)))); end
 
 function _write_json_pretty(path::AbstractString, obj)
     open(path, "w") do io; JSON3.write(io, obj; indent=2); write(io, "\n"); end
@@ -385,6 +385,26 @@ function _check_bounds(θ::Vector{Float64},
         θ[i_max] < θ[i_min] && return false
     end
     return true
+end
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Parameter normalization — CMA-ES's sigma0 is a single scalar applied uniformly
+# across all dimensions (s0 * I). PARAM_BOUNDS ranges vary from ~0.35 to 45 units
+# wide, so without normalization a shared sigma0 gives wildly different relative
+# step sizes per parameter (e.g. branch_angle_order1's 45-unit range gets a step
+# ~200x smaller, relatively, than g_axial's 0.49-unit range). Optimizing in [0,1]
+# space makes sigma0 a consistent fraction of every parameter's range.
+# ─────────────────────────────────────────────────────────────────────────────
+function _normalize_theta(θ::Vector{Float64}, param_names::Vector{String})
+    [ (θ[i] - PARAM_BOUNDS[param_names[i]][1]) /
+      (PARAM_BOUNDS[param_names[i]][2] - PARAM_BOUNDS[param_names[i]][1])
+      for i in eachindex(θ) ]
+end
+
+function _denormalize_theta(u::AbstractVector{<:Real}, param_names::Vector{String})
+    [ PARAM_BOUNDS[param_names[i]][1] +
+      u[i] * (PARAM_BOUNDS[param_names[i]][2] - PARAM_BOUNDS[param_names[i]][1])
+      for i in eachindex(u) ]
 end
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1009,6 +1029,7 @@ function run_flexible_calibration(config_path::AbstractString)
         vd_template
     end
     θ0 = _extract_theta(_read_json(src), calib_params)
+    u0 = _normalize_theta(θ0, calib_params)
     @info "θ0 source" path=src
 
     t_start  = time()
@@ -1043,9 +1064,12 @@ function run_flexible_calibration(config_path::AbstractString)
         end
 
         @info "Starting CMA-ES" maxiter=maxiter sigma0=sigma0
-        result = CMAEvolutionStrategy.minimize(loss_fn, θ0, sigma0;
+        loss_fn_u(u) = loss_fn(_denormalize_theta(u, calib_params))
+        result = CMAEvolutionStrategy.minimize(loss_fn_u, u0, sigma0;
+                                               lower=zeros(length(u0)),
+                                               upper=ones(length(u0)),
                                                maxiter=maxiter, verbosity=1)
-        θb = CMAEvolutionStrategy.xbest(result)
+        θb = _denormalize_theta(CMAEvolutionStrategy.xbest(result), calib_params)
         Jb = CMAEvolutionStrategy.fbest(result)
         @info "Grid result" n_ax=n_ax m_o1=m_o1 J=Jb
 
@@ -1064,7 +1088,7 @@ function run_flexible_calibration(config_path::AbstractString)
     # elongation values that were fixed during calibration). Fall back to the
     # template for Scenario 1 where no warm_start is given.
     best_path = joinpath(exp_dir, "best_params.json")
-    _write_candidate_VD_json(warm_start !== nothing ? warm_start : vd_template,
+    _write_candidate_VD_json(warm_start_resolved !== nothing ? warm_start_resolved : vd_template,
         best_path, best_θ;
         param_names=calib_params,
         n_axial_roots=best_int.n_axial_roots,

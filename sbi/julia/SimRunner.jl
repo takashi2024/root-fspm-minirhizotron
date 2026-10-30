@@ -26,7 +26,7 @@ using Random
 # ──────────────────────────────────────────────────────────────────────────────
 
 _read_json(path::AbstractString) =
-    open(path, "r") do io; JSON.parse(String(read(io))); end
+    open(path, "r") do io; Dict(JSON.parse(String(read(io)))); end
 
 function _write_json_pretty(path::AbstractString, obj)
     open(path, "w") do io; JSON3.write(io, obj; indent=2); write(io, "\n"); end
