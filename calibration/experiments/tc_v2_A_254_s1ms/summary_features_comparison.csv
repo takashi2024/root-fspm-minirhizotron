@@ -1,0 +1,5 @@
+feature,observed,predicted
+total_root_cm,141.36921600000002,114.64385024013701
+occupancy_rate,0.20757575757575758,0.15
+max_rooting_depth_cm,33.5876,37.1231
+center_of_mass_depth_cm,18.67391389846499,19.510377295324798

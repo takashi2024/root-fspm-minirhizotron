@@ -1,0 +1,10 @@
+metric,value
+TP,79.0
+TN,541.0
+FP,40.0
+FN,0.0
+sensitivity,1.0
+specificity,0.9311531841652324
+PPV,0.6638655462184874
+NPV,1.0
+balanced_accuracy,0.9655765920826163

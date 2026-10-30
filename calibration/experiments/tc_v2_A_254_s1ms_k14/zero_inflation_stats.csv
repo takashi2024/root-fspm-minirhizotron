@@ -1,0 +1,7 @@
+metric,value
+n_total,660.0
+n_zero,506.0
+n_positive,154.0
+zero_fraction,0.7666666666666667
+positive_min_cm,0.013697
+positive_max_cm,3.456894

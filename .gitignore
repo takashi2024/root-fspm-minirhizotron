@@ -1,6 +1,7 @@
 # ── Large simulation outputs ───────────────────────────────────────────────────
-# CMA-ES experiment results (per-case dirs, can be re-run)
-calibration/experiments/tc_v2_*/
+# CMA-ES experiment results for the 120 publication test cases (tc_v2_*) are
+# tracked on purpose: each full rerun takes weeks, and best_params.json /
+# run_summary.json are read directly by the publication figure scripts.
 calibration/experiments/v1/
 calibration/experiments/mode_exploration/
 
