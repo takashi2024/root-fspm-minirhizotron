@@ -70,7 +70,7 @@ def fmt_mean_sd(mean, sd, bold=False, fmt=".3f"):
 tex_lines = [
     r"\begin{table}[htbp]",
     r"\centering",
-    r"\caption{Structural recovery at $k$=7 with 0.2 cm skin depth (N=20 test cases for S2, N=18 for S1). "
+    r"\caption{Structural recovery at $k$=7 with 0.2 cm skin depth (N=20 test cases for S2, N=20 for S1). "
     r"SS$_\mathrm{RLD}$: skill score for root length density; SS$_\mathrm{angle}$: skill score for crossing "
     r"angle. Skill scores $>0$ indicate better than the null predictor. Bold: best per scenario. Values: mean $\pm$ SD.}",
     r"\label{tab:structural_recovery_v2}",
@@ -197,8 +197,7 @@ with pd.ExcelWriter(XLSX_OUT, engine="openpyxl") as writer:
     ws.cell(row=note_row, column=1,
             value="Notes: skin_depth = 0.2 cm (2 mm), k = 7 seeds. "
                   "SS > 0 = better than null predictor. Bold = best per scenario. "
-                  "S2: elongation known, 4 arch params. S1: all 8 params unknown. "
-                  "S1 N=18 (A_497 and C_100 excluded from S1 calibration).")
+                  "S2: elongation known, 4 arch params. S1: all 8 params unknown.")
     ws.cell(row=note_row, column=1).font = Font(italic=True, size=9)
     ws.merge_cells(start_row=note_row, start_column=1,
                    end_row=note_row, end_column=7)
