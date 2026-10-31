@@ -7,6 +7,7 @@ Layout: 2 rows × 4 columns
   Row 1: CMA-ES S2MS (k=7, 0.2 cm skin depth)
   Row 2: TabICL-MS (k=7, 0.2 cm skin depth, elongation known)
 Points coloured by g_axial quintile (Q1=slow growth → Q5=fast growth).
+R² annotated on each panel.
 
 Run from project root:
   python3 publication/scripts/plot_fig4_parameter_recovery.py
@@ -35,19 +36,30 @@ ARCH_PARAMS = ["branch_angle_order1", "g_axial",
                "branching_prob_order1", "branching_prob_order2"]
 
 PARAM_LABELS = {
-    "branch_angle_order1":   "Branch angle (°)",
-    "g_axial":               "Growth conductance\n$g_{axial}$",
-    "branching_prob_order1": "Branching probability\n$bp_{order1}$",
-    "branching_prob_order2": "Branching probability\n$bp_{order2}$",
+    "branch_angle_order1":   "θ",
+    "g_axial":               "$g_{axial}$",
+    "branching_prob_order1": "$p_1$",
+    "branching_prob_order2": "$p_2$",
 }
 
 Q_ORDER  = ["Q1", "Q2", "Q3", "Q4", "Q5"]
 Q_COLORS = {"Q1": "#1a9641", "Q2": "#a6d96a", "Q3": "#ffffbf",
             "Q4": "#fdae61", "Q5": "#d7191c"}
-Q_LABELS = {"Q1": "Q1 (slow g)",  "Q2": "Q2", "Q3": "Q3",
-            "Q4": "Q4", "Q5": "Q5 (fast g)"}
+Q_LABELS = {"Q1": "Q1 (slow $g_{axial}$)", "Q2": "Q2", "Q3": "Q3",
+            "Q4": "Q4", "Q5": "Q5 (fast $g_{axial}$)"}
 
-# ── Load CMA-ES S2MS (k=7, skin_depth=0.2 cm) ─────────────────────────────────
+
+def r2_score(true_vals, pred_vals):
+    mask = ~(np.isnan(true_vals) | np.isnan(pred_vals))
+    t, p = true_vals[mask], pred_vals[mask]
+    if len(t) < 2:
+        return float("nan")
+    ss_res = np.sum((t - p) ** 2)
+    ss_tot = np.sum((t - np.mean(t)) ** 2)
+    return 1 - ss_res / ss_tot if ss_tot > 0 else float("nan")
+
+
+# ── Load CMA-ES S2MS (k=7, skin_depth=0.2 cm) ────────────────────────────────
 
 tc = pd.read_csv(TC_CSV)
 cmae_rows = []
@@ -61,8 +73,8 @@ for _, r in tc.iterrows():
     row = {"config": r["config"], "sample_id": int(r["sample_id"]),
            "g_axial_quintile": r["g_axial_quintile"]}
     for p in ARCH_PARAMS:
-        row[f"true_{p}"]  = float(r[p])
-        row[f"pred_{p}"]  = float(bp[p]) if p in bp else float("nan")
+        row[f"true_{p}"] = float(r[p])
+        row[f"pred_{p}"] = float(bp[p]) if p in bp else float("nan")
     cmae_rows.append(row)
 
 cmae_df = pd.DataFrame(cmae_rows)
@@ -83,6 +95,8 @@ for (sid, cfg), grp in tab_s2.groupby(["sample_id", "config"]):
     for p in ARCH_PARAMS:
         prow = grp[grp["parameter"] == p]
         if len(prow) == 0:
+            row[f"true_{p}"] = float("nan")
+            row[f"pred_{p}"] = float("nan")
             continue
         row[f"true_{p}"] = float(prow["true_value"].values[0])
         row[f"pred_{p}"] = float(prow["pred_value"].values[0])
@@ -98,62 +112,49 @@ fig.subplots_adjust(left=0.06, right=0.97, top=0.82, bottom=0.11,
                     hspace=0.52, wspace=0.35)
 
 ROW_CONFIGS = [
-    (cmae_df, "CMA-ES  —  S2, $k$=7  (elongation known, 0.2 cm skin depth)"),
-    (tab_df,  "TabICL-MS  —  S2, $k$=7  (elongation known, 0.2 cm skin depth)"),
+    (cmae_df, "Inverse modelling  —  Scenario 2, $k$=7"),
+    (tab_df,  "ML-based inference  —  Scenario 2, $k$=7"),
 ]
 
 for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
+    true_arr = {p: df[f"true_{p}"].values.astype(float) for p in ARCH_PARAMS}
+    pred_arr = {p: df[f"pred_{p}"].values.astype(float) for p in ARCH_PARAMS}
+
     for col_idx, param in enumerate(ARCH_PARAMS):
         ax = axes[row_idx, col_idx]
+        tv = true_arr[param]
+        pv = pred_arr[param]
 
-        true_col = f"true_{param}"
-        pred_col = f"pred_{param}"
-
-        if true_col not in df.columns or pred_col not in df.columns:
-            ax.set_visible(False)
-            continue
-
-        true_vals = df[true_col].values
-        pred_vals = df[pred_col].values
-        mae = np.nanmean(np.abs(pred_vals - true_vals))
-
-        lo = min(np.nanmin(true_vals), np.nanmin(pred_vals))
-        hi = max(np.nanmax(true_vals), np.nanmax(pred_vals))
-        pad = (hi - lo) * 0.07
+        mask = ~(np.isnan(tv) | np.isnan(pv))
+        lo = min(tv[mask].min(), pv[mask].min())
+        hi = max(tv[mask].max(), pv[mask].max())
+        pad = (hi - lo) * 0.08
         lo, hi = lo - pad, hi + pad
         ax.plot([lo, hi], [lo, hi], color="0.5", lw=1.0, ls="--", zorder=1)
 
-        for _, r in df.iterrows():
-            ax.scatter(r[true_col], r[pred_col],
-                       color=Q_COLORS.get(r["g_axial_quintile"], "gray"),
+        for i, (t_val, p_val, q) in enumerate(zip(tv, pv, df["g_axial_quintile"])):
+            if np.isnan(t_val) or np.isnan(p_val):
+                continue
+            ax.scatter(t_val, p_val,
+                       color=Q_COLORS.get(q, "gray"),
                        edgecolors="0.25", linewidths=0.5, s=55, zorder=3)
 
-        if param == "branch_angle_order1":
-            mae_str = f"MAE = {mae:.1f}°"
-        elif param == "g_axial":
-            mae_str = f"MAE = {mae:.4f}"
-        else:
-            mae_str = f"MAE = {mae:.3f}"
-
+        r2 = r2_score(tv, pv)
         ax.set_xlim(lo, hi)
         ax.set_ylim(lo, hi)
         ax.set_xlabel("True", fontsize=9)
-        ax.set_ylabel("Predicted", fontsize=9)
+        ax.set_ylabel("Predicted", fontsize=9) if col_idx == 0 else ax.set_ylabel("")
         ax.tick_params(labelsize=8)
         ax.grid(True, lw=0.35, alpha=0.5)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
+        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$ = {r2:+.2f}", fontsize=10, pad=4)
 
-        title = f"{PARAM_LABELS[param]}\n{mae_str}"
-        ax.set_title(title, fontsize=9, pad=4)
-
-    ax0 = axes[row_idx, 0]
-    ax0.set_ylabel("Predicted", fontsize=9)
-    ax0.annotate(row_label,
-                 xy=(0.0, 1.18), xycoords="axes fraction",
-                 fontsize=9.5, fontweight="bold",
-                 ha="left", va="bottom",
-                 bbox=dict(boxstyle="round,pad=0.25", fc="#eef2f7", ec="0.7", lw=0.8))
+    axes[row_idx, 0].annotate(
+        row_label,
+        xy=(0.0, 1.22), xycoords="axes fraction",
+        fontsize=10, fontweight="bold", ha="left", va="bottom",
+        bbox=dict(boxstyle="round,pad=0.25", fc="#eef2f7", ec="0.7", lw=0.8))
 
 # ── Legend ────────────────────────────────────────────────────────────────────
 
@@ -166,8 +167,6 @@ fig.legend(handles=legend_patches, title="$g_{axial}$ quintile",
            loc="lower center", ncol=5, fontsize=9, title_fontsize=9,
            framealpha=0.9, bbox_to_anchor=(0.52, 0.01))
 
-fig.suptitle("Parameter recovery: true vs predicted  (N=20 test cases, Scenario 2 — elongation known, skin depth = 0.2 cm)",
-             fontsize=12, y=0.97)
-
+os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
 print(f"Saved → {FIG_OUT}")
