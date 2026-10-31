@@ -184,11 +184,5 @@ ax2.grid(axis="y", lw=0.35, alpha=0.5, color="0.75")
 ax2.legend(fontsize=8, loc="upper right", framealpha=0.9, handlelength=1.5,
            title="$g_{axial}$ quintile", title_fontsize=8)
 
-fig.suptitle(
-    f"Figure S1 — Seed convergence: variance of the $k$-seed mean  "
-    f"(N={N} samples × K={K} seeds)",
-    fontsize=10.5, y=0.93
-)
-
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
 print(f"Saved → {FIG_OUT}")
