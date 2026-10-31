@@ -111,7 +111,7 @@ fig = plt.figure(figsize=(14, 20))
 #                 row 3 = architectural header, rows 4-5 = architectural panels
 gs  = GridSpec(6, 4, figure=fig,
                height_ratios=[0.12, 1, 1, 0.12, 1, 1],
-               hspace=0.95, wspace=0.45,
+               hspace=1.10, wspace=0.45,
                left=0.08, right=0.97, top=0.97, bottom=0.07)
 
 def add_group_header(row, label):
