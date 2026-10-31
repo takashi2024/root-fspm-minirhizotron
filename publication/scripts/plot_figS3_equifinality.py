@@ -1,9 +1,9 @@
 """
 plot_figS3_equifinality.py
 
-Figure S3 (2 mm skin depth) — Equifinality: CMA-ES final objective vs 3D structural recovery.
-2x2 grid: rows = Scenario 2 (S2MS) / Scenario 1 (S1MS), cols = SS_rld / SS_angle.
-Shows that low minirhizotron loss does NOT guarantee good structural recovery in either scenario.
+Figure S3 — Equifinality: CMA-ES final objective vs 3D structural recovery.
+3×4 grid: rows = k (1, 7, 14); cols = S1 SS_RLD, S1 SS_angle, S2 SS_RLD, S2 SS_angle.
+Shows that low minirhizotron loss does NOT guarantee good structural recovery.
 
 Run from project root:
   python3 publication/scripts/plot_figS3_equifinality.py
@@ -25,13 +25,11 @@ ROOT    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 CALIB   = os.path.join(ROOT, "calibration")
 FIG_OUT = os.path.join(ROOT, "publication", "figures", "figS3_equifinality.png")
 
-# Internal code → paper config label
 CFG_LABEL  = {"A": "A", "B2": "B", "C": "C", "D2": "D"}
 CFG_COLORS = {"A": "#2166ac", "B2": "#4dac26", "C": "#d01c8b", "D2": "#f1a340"}
 
 
 def load_J(suffix):
-    """Load best_J from run_summary.json for all experiments matching suffix."""
     exp_root = os.path.join(CALIB, "experiments")
     rows = []
     for p in glob.glob(os.path.join(exp_root, f"tc_v2_*_{suffix}", "run_summary.json")):
@@ -44,64 +42,69 @@ def load_J(suffix):
         config    = "_".join(tokens[:-1])
         rows.append({"config": config, "sample_id": sample_id,
                      "best_J": d.get("best_J")})
-    df = pd.DataFrame(rows)
-    print(f"  Loaded {len(df)} {suffix} run summaries")
-    return df
+    return pd.DataFrame(rows)
 
 
 def load_struct(csv_name, method_name):
-    """Load CMA-ES structural metrics from a comparison CSV."""
     df = pd.read_csv(os.path.join(CALIB, csv_name))
     return df[df["method"] == method_name].copy()
 
 
 def build_dataset(suffix, csv_name, method_name):
-    J_df     = load_J(suffix)
-    struct   = load_struct(csv_name, method_name)
-    merged   = pd.merge(J_df, struct, on=["config", "sample_id"])
-    merged   = merged.dropna(subset=["best_J", "ss_rld", "ss_angle"])
-    print(f"  Merged: {len(merged)} cases")
+    J_df   = load_J(suffix)
+    struct = load_struct(csv_name, method_name)
+    merged = pd.merge(J_df, struct, on=["config", "sample_id"])
+    merged = merged.dropna(subset=["best_J", "ss_rld", "ss_angle"])
+    print(f"  {suffix}: {len(merged)} cases")
     return merged
 
 
-# ── Load both scenarios ───────────────────────────────────────────────────────
+# ── Load all k × scenario combinations ───────────────────────────────────────
 
-print("Loading Scenario 2 (S2MS):")
-s2 = build_dataset("s2ms", "comparison_structure_metrics_v2_s2ms.csv", "CMA-ES-S2MS")
-
-print("Loading Scenario 1 (S1MS):")
-s1 = build_dataset("s1ms", "comparison_structure_metrics_v2_s1ms.csv", "CMA-ES-S1MS")
-
-SCENARIOS = [
-    (s1, "Scenario 1 (all parameters unknown)"),
-    (s2, "Scenario 2 (elongation fixed)"),
-]
-METRICS = [
-    ("ss_rld",   "SS$_{\\mathrm{RLD}}$"),
-    ("ss_angle", "SS$_{\\mathrm{angle}}$"),
+K_CONFIGS = [
+    {"k": 1,
+     "s1": build_dataset("s1",       "comparison_structure_metrics_v2_s1_k1.csv",   "CMA-ES-S1"),
+     "s2": build_dataset("s2",       "comparison_structure_metrics_v2_s2_k1.csv",   "CMA-ES-S2")},
+    {"k": 7,
+     "s1": build_dataset("s1ms",     "comparison_structure_metrics_v2_s1ms.csv",    "CMA-ES-S1MS"),
+     "s2": build_dataset("s2ms",     "comparison_structure_metrics_v2_s2ms.csv",    "CMA-ES-S2MS")},
+    {"k": 14,
+     "s1": build_dataset("s1ms_k14", "comparison_structure_metrics_v2_s1ms_k14.csv","CMA-ES-S1MS-k14"),
+     "s2": build_dataset("s2ms_k14", "comparison_structure_metrics_v2_s2ms_k14.csv","CMA-ES-S2MS-k14")},
 ]
 
-# ── Plot 2×2 ─────────────────────────────────────────────────────────────────
+# Cols: S1 SS_RLD, S1 SS_angle, S2 SS_RLD, S2 SS_angle
+COLS = [
+    ("s1", "ss_rld",   "S1  SS$_{\\mathrm{RLD}}$"),
+    ("s1", "ss_angle", "S1  SS$_{\\mathrm{angle}}$"),
+    ("s2", "ss_rld",   "S2  SS$_{\\mathrm{RLD}}$"),
+    ("s2", "ss_angle", "S2  SS$_{\\mathrm{angle}}$"),
+]
 
-fig, axes = plt.subplots(2, 2, figsize=(9, 8.5))
-fig.subplots_adjust(left=0.09, right=0.97, top=0.88, bottom=0.12,
-                    hspace=0.42, wspace=0.38)
+# ── Plot 3×4 ─────────────────────────────────────────────────────────────────
 
-for row_idx, (df, scen_label) in enumerate(SCENARIOS):
-    colors = [CFG_COLORS.get(c, "#888888") for c in df["config"]]
-    for col_idx, (met, ylabel) in enumerate(METRICS):
-        ax = axes[row_idx, col_idx]
-        x  = df["best_J"].values
-        y  = df[met].values
+fig, axes = plt.subplots(3, 4, figsize=(14, 10.5))
+fig.subplots_adjust(left=0.07, right=0.97, top=0.93, bottom=0.11,
+                    hspace=0.48, wspace=0.38)
+
+for row_idx, kcfg in enumerate(K_CONFIGS):
+    k = kcfg["k"]
+    for col_idx, (scen_key, met, col_title) in enumerate(COLS):
+        ax  = axes[row_idx, col_idx]
+        df  = kcfg[scen_key]
+        colors = [CFG_COLORS.get(c, "#888888") for c in df["config"]]
+
+        x = df["best_J"].values
+        y = df[met].values
 
         ax.scatter(x, y, c=colors, edgecolors="0.25", linewidths=0.6,
-                   s=60, zorder=3, alpha=0.9)
+                   s=55, zorder=3, alpha=0.9)
         ax.axhline(0, color="0.5", lw=0.8, ls=":", zorder=1)
 
         r, pval = stats.pearsonr(x, y)
         p_str = "p<0.05" if pval < 0.05 else f"p={pval:.2f}"
         ax.text(0.97, 0.05, f"r = {r:+.2f}  ({p_str})",
-                transform=ax.transAxes, ha="right", va="bottom", fontsize=8.5,
+                transform=ax.transAxes, ha="right", va="bottom", fontsize=8,
                 color="#333333",
                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="0.8", alpha=0.8))
 
@@ -109,28 +112,32 @@ for row_idx, (df, scen_label) in enumerate(SCENARIOS):
         xfit = np.linspace(x.min(), x.max(), 100)
         ax.plot(xfit, m_fit * xfit + b_fit, color="0.6", lw=1.2, ls="--", zorder=2)
 
-        ax.set_xlabel("CMA-ES final objective ($J_{best}$)", fontsize=9)
-        ax.set_ylabel(ylabel, fontsize=9.5)
-        ax.tick_params(labelsize=8.5)
+        ax.set_xlabel("CMA-ES final objective ($J_{best}$)", fontsize=8.5)
+        ax.set_ylabel(col_title.split("  ")[1] if col_idx > 0 else col_title.split("  ")[1],
+                      fontsize=9)
+        ax.tick_params(labelsize=8)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.grid(axis="both", lw=0.35, alpha=0.45, color="0.75")
 
-        if col_idx == 0:
-            ax.set_title(f"{scen_label}\n{ylabel}", fontsize=9.5,
-                         fontweight="bold", pad=5)
-        else:
-            ax.set_title(ylabel, fontsize=9.5, fontweight="bold", pad=5)
+        title = col_title if row_idx == 0 else col_title.split("  ")[1]
+        ax.set_title(title, fontsize=9, fontweight="bold", pad=5)
+
+    # Row label: k value
+    axes[row_idx, 0].annotate(
+        f"$k$ = {k}",
+        xy=(-0.28, 0.5), xycoords="axes fraction",
+        fontsize=10, fontweight="bold", ha="center", va="center",
+        rotation=90,
+        bbox=dict(boxstyle="round,pad=0.3", fc="#eef2f7", ec="0.7", lw=0.8))
 
 # ── Legend ────────────────────────────────────────────────────────────────────
 
 cfg_patches = [mpatches.Patch(facecolor=CFG_COLORS[c], edgecolor="0.25",
-                               linewidth=0.5,
-                               label=f"Config {CFG_LABEL[c]}")
+                               linewidth=0.5, label=f"Config {CFG_LABEL[c]}")
                for c in ["A", "B2", "C", "D2"]]
 fig.legend(handles=cfg_patches, loc="lower center", ncol=4, fontsize=8.5,
            framealpha=0.9, bbox_to_anchor=(0.52, 0.01), handlelength=1.2)
-
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
