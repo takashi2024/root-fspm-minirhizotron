@@ -4,7 +4,7 @@ plot_fig5_structural_k_effect.py
 Figure 5 — Effect of observation seed count (k) on 3D structural recovery.
 Two panels: SS_rld, SS_angle.
 Four lines: inverse modelling S2/S1, ML-based inference S2/S1.
-Shaded bands show ±1 SD across the 20 test cases.
+Shaded bands show ±1 SE (SD/√20) across the 20 test cases.
 
 Run from project root:
   python3 publication/scripts/plot_fig5_structural_k_effect.py
@@ -85,11 +85,11 @@ for ax, met in zip(axes, METRICS):
     for method in ["CMA-ES", "TabICL-MS"]:
         for scen in SCENARIOS:
             y   = np.array(means[scen][method][met])
-            sd  = np.array(stds[scen][method][met])
+            se  = np.array(stds[scen][method][met]) / np.sqrt(20)
             st  = STYLE[(scen, method)]
             z   = 3 if method == "TabICL-MS" else 2
-            ax.fill_between(x, y - sd, y + sd,
-                            color=st["color"], alpha=0.10, zorder=1)
+            ax.fill_between(x, y - se, y + se,
+                            color=st["color"], alpha=0.18, zorder=1)
             ax.plot(x, y, zorder=z, **st)
 
     ax.set_xticks(K_VALS)
