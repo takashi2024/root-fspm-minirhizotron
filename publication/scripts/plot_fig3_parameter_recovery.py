@@ -111,8 +111,8 @@ fig = plt.figure(figsize=(14, 20))
 #                 row 3 = architectural header, rows 4-5 = architectural panels
 gs  = GridSpec(6, 4, figure=fig,
                height_ratios=[0.12, 1, 1, 0.12, 1, 1],
-               hspace=0.80, wspace=0.45,
-               left=0.07, right=0.97, top=0.97, bottom=0.07)
+               hspace=0.95, wspace=0.45,
+               left=0.08, right=0.97, top=0.97, bottom=0.07)
 
 def add_group_header(row, label):
     ax = fig.add_subplot(gs[row, :])
@@ -120,7 +120,7 @@ def add_group_header(row, label):
     ax.text(0.5, 0.5, label,
             transform=ax.transAxes,
             ha="center", va="center",
-            fontsize=13, fontweight="bold", color="#333333",
+            fontsize=15, fontweight="bold", color="#333333",
             bbox=dict(boxstyle="round,pad=0.35", fc="#e8eef5", ec="0.65", lw=1.0))
 
 add_group_header(0, "Elongation parameters")
@@ -168,20 +168,20 @@ for gs_start, params, cmae_label, tab_label in GROUP_BLOCKS:
             r2 = r2_score(tv, pv)
             ax.set_xlim(lo, hi)
             ax.set_ylim(lo, hi)
-            ax.set_xlabel("True", fontsize=11)
-            ax.set_ylabel("Predicted", fontsize=11) if col_idx == 0 else ax.set_ylabel("")
-            ax.tick_params(labelsize=10)
+            ax.set_xlabel("True", fontsize=13)
+            ax.set_ylabel("Predicted", fontsize=13) if col_idx == 0 else ax.set_ylabel("")
+            ax.tick_params(labelsize=12)
             ax.grid(True, lw=0.35, alpha=0.5)
             ax.spines["top"].set_visible(False)
             ax.spines["right"].set_visible(False)
-            ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=13, pad=8)
+            ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=15, pad=10)
 
             # Row annotation on leftmost column
             if col_idx == 0:
                 ax.annotate(
                     row_label,
-                    xy=(0.0, 1.32), xycoords="axes fraction",
-                    fontsize=11, fontweight="bold", ha="left", va="bottom",
+                    xy=(0.0, 1.40), xycoords="axes fraction",
+                    fontsize=13, fontweight="bold", ha="left", va="bottom",
                     bbox=dict(boxstyle="round,pad=0.30", fc="#eef2f7", ec="0.7", lw=0.8))
 
 # ── Legend ────────────────────────────────────────────────────────────────────
@@ -192,7 +192,7 @@ legend_patches = [
     for q in Q_ORDER
 ]
 fig.legend(handles=legend_patches, title="$g_{axial}$ quintile",
-           loc="lower center", ncol=5, fontsize=11, title_fontsize=11,
+           loc="lower center", ncol=5, fontsize=13, title_fontsize=13,
            framealpha=0.9, bbox_to_anchor=(0.52, 0.01))
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
