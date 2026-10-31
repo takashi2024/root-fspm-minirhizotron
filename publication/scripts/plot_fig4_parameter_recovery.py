@@ -93,9 +93,9 @@ ROW_CONFIGS = [
 
 # ── Plot 2×4 ──────────────────────────────────────────────────────────────────
 
-fig, axes = plt.subplots(2, 4, figsize=(16, 9.5))
-fig.subplots_adjust(left=0.06, right=0.97, top=0.82, bottom=0.11,
-                    hspace=0.52, wspace=0.35)
+fig, axes = plt.subplots(2, 4, figsize=(14, 10))
+fig.subplots_adjust(left=0.07, right=0.97, top=0.88, bottom=0.12,
+                    hspace=0.70, wspace=0.40)
 
 for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
     for col_idx, param in enumerate(ARCH_PARAMS):
@@ -122,19 +122,19 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
         r2 = r2_score(tv, pv)
         ax.set_xlim(lo, hi)
         ax.set_ylim(lo, hi)
-        ax.set_xlabel("True", fontsize=9)
-        ax.set_ylabel("Predicted", fontsize=9) if col_idx == 0 else ax.set_ylabel("")
-        ax.tick_params(labelsize=8)
+        ax.set_xlabel("True", fontsize=11)
+        ax.set_ylabel("Predicted", fontsize=11) if col_idx == 0 else ax.set_ylabel("")
+        ax.tick_params(labelsize=10)
         ax.grid(True, lw=0.35, alpha=0.5)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
-        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$ = {r2:+.2f}", fontsize=10, pad=4)
+        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$ = {r2:+.2f}", fontsize=13, pad=8)
 
     axes[row_idx, 0].annotate(
         row_label,
-        xy=(0.0, 1.22), xycoords="axes fraction",
-        fontsize=10, fontweight="bold", ha="left", va="bottom",
-        bbox=dict(boxstyle="round,pad=0.25", fc="#eef2f7", ec="0.7", lw=0.8))
+        xy=(0.0, 1.32), xycoords="axes fraction",
+        fontsize=11, fontweight="bold", ha="left", va="bottom",
+        bbox=dict(boxstyle="round,pad=0.30", fc="#eef2f7", ec="0.7", lw=0.8))
 
 # ── Legend ────────────────────────────────────────────────────────────────────
 
@@ -144,7 +144,7 @@ legend_patches = [
     for q in Q_ORDER
 ]
 fig.legend(handles=legend_patches, title="$g_{axial}$ quintile",
-           loc="lower center", ncol=5, fontsize=9, title_fontsize=9,
+           loc="lower center", ncol=5, fontsize=11, title_fontsize=11,
            framealpha=0.9, bbox_to_anchor=(0.52, 0.01))
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
