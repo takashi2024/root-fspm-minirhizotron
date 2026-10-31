@@ -145,20 +145,19 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
         r2 = r2_score(tv, pv)
         ax.set_xlim(lo, hi)
         ax.set_ylim(lo, hi)
-        ax.set_xlabel("True", fontsize=7.5)
-        ax.set_ylabel("Predicted", fontsize=7.5) if col_idx == 0 else ax.set_ylabel("")
-        ax.tick_params(labelsize=7)
+        ax.set_xlabel("True", fontsize=9.5)
+        ax.set_ylabel("Predicted", fontsize=9.5) if col_idx == 0 else ax.set_ylabel("")
+        ax.tick_params(labelsize=8.5)
         ax.grid(True, lw=0.35, alpha=0.5)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
-        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=8.5, pad=3)
+        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=11, pad=3)
 
-    # Row separator line between k-groups (after rows 1, 3)
     axes[row_idx, 0].annotate(
         row_label,
-        xy=(0.0, 1.22), xycoords="axes fraction",
-        fontsize=8.5, fontweight="bold", ha="left", va="bottom",
-        bbox=dict(boxstyle="round,pad=0.25", fc="#eef2f7", ec="0.7", lw=0.8))
+        xy=(0.0, 1.24), xycoords="axes fraction",
+        fontsize=10.5, fontweight="bold", ha="left", va="bottom",
+        bbox=dict(boxstyle="round,pad=0.28", fc="#eef2f7", ec="0.7", lw=0.8))
 
 # ── Legend ────────────────────────────────────────────────────────────────────
 
@@ -168,7 +167,7 @@ legend_patches = [
     for q in Q_ORDER
 ]
 fig.legend(handles=legend_patches, title="$g_{axial}$ quintile",
-           loc="lower center", ncol=5, fontsize=8.5, title_fontsize=8.5,
+           loc="lower center", ncol=5, fontsize=10, title_fontsize=10,
            framealpha=0.9, bbox_to_anchor=(0.52, 0.005))
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
