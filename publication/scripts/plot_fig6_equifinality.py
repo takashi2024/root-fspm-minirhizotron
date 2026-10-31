@@ -1,13 +1,13 @@
 """
-plot_figS4_equifinality.py
+plot_fig6_equifinality.py
 
-Figure S3 — Equifinality: CMA-ES final objective vs 3D structural recovery.
+Figure 6 — Equifinality: CMA-ES final objective vs 3D structural recovery.
 3×4 grid: rows = k (1, 7, 14); cols = S1 SS_RLD, S1 SS_angle, S2 SS_RLD, S2 SS_angle.
 Shows that low minirhizotron loss does NOT guarantee good structural recovery.
 
 Run from project root:
-  python3 publication/scripts/plot_figS4_equifinality.py
-Output: publication/figures/figS4_equifinality.png
+  python3 publication/scripts/plot_fig6_equifinality.py
+Output: publication/figures/fig6_equifinality.png
 """
 
 import os
@@ -23,7 +23,7 @@ import scipy.stats as stats
 
 ROOT    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 CALIB   = os.path.join(ROOT, "calibration")
-FIG_OUT = os.path.join(ROOT, "publication", "figures", "figS4_equifinality.png")
+FIG_OUT = os.path.join(ROOT, "publication", "figures", "fig6_equifinality.png")
 
 CFG_LABEL  = {"A": "A", "B2": "B", "C": "C", "D2": "D"}
 CFG_COLORS = {"A": "#2166ac", "B2": "#4dac26", "C": "#d01c8b", "D2": "#f1a340"}
