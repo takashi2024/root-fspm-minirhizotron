@@ -3,8 +3,8 @@ plot_fig5_structural_k_effect.py
 
 Figure 5 — Effect of observation seed count (k) on 3D structural recovery.
 Two panels: SS_rld, SS_angle.
-Four lines: CMA-ES S2, TabICL-MS S2, CMA-ES S1, TabICL-MS S1.
-Chamfer distance excluded (not included in the paper).
+Four lines: inverse modelling S2/S1, ML-based inference S2/S1.
+Shaded bands show ±1 SD across the 20 test cases.
 
 Run from project root:
   python3 publication/scripts/plot_fig5_structural_k_effect.py
@@ -45,7 +45,8 @@ SCENARIOS = ["S2", "S1"]
 METHODS   = ["CMA-ES", "TabICL-MS"]
 METRICS   = ["ss_rld", "ss_angle"]
 
-results = {s: {m: {met: [] for met in METRICS} for m in METHODS} for s in SCENARIOS}
+means = {s: {m: {met: [] for met in METRICS} for m in METHODS} for s in SCENARIOS}
+stds  = {s: {m: {met: [] for met in METRICS} for m in METHODS} for s in SCENARIOS}
 
 for scen in SCENARIOS:
     for k in K_VALS:
@@ -54,7 +55,8 @@ for scen in SCENARIOS:
         for method, label in [("CMA-ES", cmae_label), ("TabICL-MS", tabicl_label)]:
             sub = df[df["method"] == label]
             for met in METRICS:
-                results[scen][method][met].append(sub[met].mean())
+                means[scen][method][met].append(sub[met].mean())
+                stds[scen][method][met].append(sub[met].std())
 
 # ── Style ─────────────────────────────────────────────────────────────────────
 
@@ -66,34 +68,35 @@ STYLE = {
 }
 
 PANEL = {
-    "ss_rld":   dict(ylabel="SS$_{\\mathrm{RLD}}$",   title="Root length density",
-                     hline=0.0, ylim=(-1.05, 0.45)),
-    "ss_angle": dict(ylabel="SS$_{\\mathrm{angle}}$", title="Crossing angle",
-                     hline=0.0, ylim=(-0.25, 0.55)),
+    "ss_rld":   dict(ylabel="SS$_{\\mathrm{RLD}}$",   title="Root length density"),
+    "ss_angle": dict(ylabel="SS$_{\\mathrm{angle}}$", title="Crossing angle"),
 }
 
 # ── Plot ──────────────────────────────────────────────────────────────────────
 
-fig, axes = plt.subplots(1, 2, figsize=(9, 5.0))
-fig.subplots_adjust(left=0.09, right=0.97, top=0.78, bottom=0.26, wspace=0.38)
+fig, axes = plt.subplots(1, 2, figsize=(9, 5.2))
+fig.subplots_adjust(left=0.09, right=0.97, top=0.84, bottom=0.26, wspace=0.38)
 
 x = np.array(K_VALS)
 
 for ax, met in zip(axes, METRICS):
     cfg = PANEL[met]
-    ax.axhline(cfg["hline"], color="0.6", lw=0.9, ls=":", zorder=0)
+    ax.axhline(0, color="0.6", lw=0.9, ls=":", zorder=0)
     for method in ["CMA-ES", "TabICL-MS"]:
         for scen in SCENARIOS:
-            y  = np.array(results[scen][method][met])
-            st = STYLE[(scen, method)]
-            z  = 3 if method == "TabICL-MS" else 2
+            y   = np.array(means[scen][method][met])
+            sd  = np.array(stds[scen][method][met])
+            st  = STYLE[(scen, method)]
+            z   = 3 if method == "TabICL-MS" else 2
+            ax.fill_between(x, y - sd, y + sd,
+                            color=st["color"], alpha=0.10, zorder=1)
             ax.plot(x, y, zorder=z, **st)
+
     ax.set_xticks(K_VALS)
     ax.set_xlabel("Number of observation seeds ($k$)", fontsize=10)
     ax.set_ylabel(cfg["ylabel"], fontsize=10)
     ax.set_title(cfg["title"], fontsize=10, fontweight="bold", pad=6)
     ax.set_xlim(0.5, 15.5)
-    ax.set_ylim(cfg["ylim"])
     ax.tick_params(labelsize=9)
     ax.grid(axis="y", lw=0.4, alpha=0.5, color="0.75")
     ax.spines["top"].set_visible(False)
@@ -103,20 +106,17 @@ for ax, met in zip(axes, METRICS):
 
 legend_handles = [
     Line2D([0], [0], color="#1a6faf", ls="-",  lw=2.2, marker="o", ms=7,
-           label="TabICL-MS  S2 (elongation known)"),
+           label="ML-based inference  —  Scenario 2"),
     Line2D([0], [0], color="#1a6faf", ls="--", lw=1.8, marker="s", ms=6,
-           label="CMA-ES        S2 (elongation known)"),
+           label="Inverse modelling      —  Scenario 2"),
     Line2D([0], [0], color="#c0392b", ls="-",  lw=2.2, marker="o", ms=7,
-           label="TabICL-MS  S1 (all params unknown)"),
+           label="ML-based inference  —  Scenario 1"),
     Line2D([0], [0], color="#c0392b", ls="--", lw=1.8, marker="s", ms=6,
-           label="CMA-ES        S1 (all params unknown)"),
+           label="Inverse modelling      —  Scenario 1"),
 ]
 fig.legend(handles=legend_handles, loc="lower center",
            ncol=2, fontsize=9.5, framealpha=0.9,
            bbox_to_anchor=(0.52, 0.01), columnspacing=1.5, handlelength=2.2)
-
-fig.suptitle("Effect of observation seed count on 3D structural recovery  (N=20 test cases)",
-             fontsize=11, y=0.93)
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
