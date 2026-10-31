@@ -1,8 +1,11 @@
 """
 plot_fig3_parameter_recovery.py
 
-Figure 3 — Parameter recovery: true vs predicted for all 8 parameters, Scenario 1.
-Layout: 6 rows × 8 cols (k=1/7/14, each with CMA-ES + TabICL row).
+Figure 3 — Parameter recovery: true vs predicted for all 8 parameters.
+Scenario 1: all 8 parameters unknown (elongation NOT fixed), k=7.
+Layout: 2 rows × 8 columns
+  Row 1: CMA-ES S1MS (k=7)
+  Row 2: TabICL-MS (k=7, all parameters unknown)
 """
 
 import os, json
@@ -41,15 +44,6 @@ Q_COLORS = {"Q1": "#1a9641", "Q2": "#a6d96a", "Q3": "#ffffbf",
 Q_LABELS = {"Q1": "Q1 (slow $g_{axial}$)", "Q2": "Q2", "Q3": "Q3",
             "Q4": "Q4", "Q5": "Q5 (fast $g_{axial}$)"}
 
-K_CONFIGS = [
-    {"k": 1,  "cma_suffix": "s1",
-     "tab_csv": os.path.join(SBI, "test_case_eval_multiseed_v2_k1",  "results_tabicl_ms_v2_k1.csv")},
-    {"k": 7,  "cma_suffix": "s1ms",
-     "tab_csv": os.path.join(SBI, "test_case_eval_multiseed_v2",     "results_tabicl_multiseed_v2.csv")},
-    {"k": 14, "cma_suffix": "s1ms_k14",
-     "tab_csv": os.path.join(SBI, "test_case_eval_multiseed_v2_k14", "results_tabicl_ms_v2_k14.csv")},
-]
-
 
 def r2_score(tv, pv):
     mask = ~(np.isnan(tv) | np.isnan(pv))
@@ -61,59 +55,55 @@ def r2_score(tv, pv):
     return 1 - ss_res / ss_tot if ss_tot > 0 else float("nan")
 
 
-def load_cmae(tc, suffix):
-    rows = []
-    for _, r in tc.iterrows():
-        tag  = f"tc_v2_{r['config']}_{int(r['sample_id'])}_{suffix}"
-        path = os.path.join(CALIB, "experiments", tag, "best_params.json")
-        if not os.path.exists(path):
-            continue
-        with open(path) as f:
-            bp = json.load(f)
-        row = {"config": r["config"], "sample_id": int(r["sample_id"]),
-               "g_axial_quintile": r["g_axial_quintile"]}
-        for p in ALL_PARAMS:
-            row[f"true_{p}"] = float(r[p]) if p in r.index else float("nan")
-            row[f"pred_{p}"] = float(bp[p]) if p in bp else float("nan")
-        rows.append(row)
-    return pd.DataFrame(rows)
-
-
-def load_tabicl(tc, csv_path):
-    raw  = pd.read_csv(csv_path)
-    sub  = raw[raw["scenario"] == "Scen1: all unknown"].copy()
-    rows = []
-    for (sid, cfg), grp in sub.groupby(["sample_id", "config"]):
-        tc_row = tc[(tc["sample_id"] == int(sid)) & (tc["config"] == cfg)]
-        if len(tc_row) == 0:
-            continue
-        row = {"config": cfg, "sample_id": int(sid),
-               "g_axial_quintile": tc_row["g_axial_quintile"].values[0]}
-        for p in ALL_PARAMS:
-            prow = grp[grp["parameter"] == p]
-            row[f"true_{p}"] = float(prow["true_value"].values[0]) if len(prow) else float("nan")
-            row[f"pred_{p}"] = float(prow["pred_value"].values[0]) if len(prow) else float("nan")
-        rows.append(row)
-    return pd.DataFrame(rows)
-
-
 tc = pd.read_csv(TC_CSV)
 
-# Build row configs: for each k, CMA-ES then TabICL
-ROW_CONFIGS = []
-for cfg in K_CONFIGS:
-    k = cfg["k"]
-    cmae_df = load_cmae(tc, cfg["cma_suffix"])
-    tab_df  = load_tabicl(tc, cfg["tab_csv"])
-    print(f"k={k}: CMA-ES={len(cmae_df)}, TabICL={len(tab_df)}")
-    ROW_CONFIGS.append((cmae_df, f"Inverse modelling  —  Scenario 1, $k$={k}"))
-    ROW_CONFIGS.append((tab_df,  f"ML-based inference  —  Scenario 1, $k$={k}"))
+# CMA-ES S1MS (k=7)
+cmae_rows = []
+for _, r in tc.iterrows():
+    tag  = f"tc_v2_{r['config']}_{int(r['sample_id'])}_s1ms"
+    path = os.path.join(CALIB, "experiments", tag, "best_params.json")
+    if not os.path.exists(path):
+        continue
+    with open(path) as f:
+        bp = json.load(f)
+    row = {"config": r["config"], "sample_id": int(r["sample_id"]),
+           "g_axial_quintile": r["g_axial_quintile"]}
+    for p in ALL_PARAMS:
+        row[f"true_{p}"] = float(r[p]) if p in r.index else float("nan")
+        row[f"pred_{p}"] = float(bp[p]) if p in bp else float("nan")
+    cmae_rows.append(row)
+cmae_df = pd.DataFrame(cmae_rows)
+print(f"CMA-ES S1MS k=7: {len(cmae_df)}")
 
-# ── Plot 6×8 ──────────────────────────────────────────────────────────────────
+# TabICL-MS S1 (k=7)
+tab_raw = pd.read_csv(os.path.join(SBI, "test_case_eval_multiseed_v2",
+                                   "results_tabicl_multiseed_v2.csv"))
+tab_s1  = tab_raw[tab_raw["scenario"] == "Scen1: all unknown"].copy()
+tab_rows = []
+for (sid, cfg), grp in tab_s1.groupby(["sample_id", "config"]):
+    tc_row = tc[(tc["sample_id"] == int(sid)) & (tc["config"] == cfg)]
+    if len(tc_row) == 0:
+        continue
+    row = {"config": cfg, "sample_id": int(sid),
+           "g_axial_quintile": tc_row["g_axial_quintile"].values[0]}
+    for p in ALL_PARAMS:
+        prow = grp[grp["parameter"] == p]
+        row[f"true_{p}"] = float(prow["true_value"].values[0]) if len(prow) else float("nan")
+        row[f"pred_{p}"] = float(prow["pred_value"].values[0]) if len(prow) else float("nan")
+    tab_rows.append(row)
+tab_df = pd.DataFrame(tab_rows)
+print(f"TabICL-MS S1 k=7: {len(tab_df)}")
 
-fig, axes = plt.subplots(6, 8, figsize=(26, 23))
-fig.subplots_adjust(left=0.04, right=0.98, top=0.94, bottom=0.06,
-                    hspace=0.55, wspace=0.42)
+ROW_CONFIGS = [
+    (cmae_df, "Inverse modelling  —  Scenario 1, $k$=7"),
+    (tab_df,  "ML-based inference  —  Scenario 1, $k$=7"),
+]
+
+# ── Plot 2×8 ──────────────────────────────────────────────────────────────────
+
+fig, axes = plt.subplots(2, 8, figsize=(24, 9.5))
+fig.subplots_adjust(left=0.04, right=0.98, top=0.82, bottom=0.13,
+                    hspace=0.52, wspace=0.42)
 
 for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
     for col_idx, param in enumerate(ALL_PARAMS):
@@ -140,7 +130,7 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
                 continue
             ax.scatter(tv[idx], pv[idx],
                        color=Q_COLORS.get(r["g_axial_quintile"], "gray"),
-                       edgecolors="0.25", linewidths=0.5, s=40, zorder=3)
+                       edgecolors="0.25", linewidths=0.5, s=50, zorder=3)
 
         r2 = r2_score(tv, pv)
         ax.set_xlim(lo, hi)
@@ -151,7 +141,7 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
         ax.grid(True, lw=0.35, alpha=0.5)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
-        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=11, pad=3)
+        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=11, pad=4)
 
     axes[row_idx, 0].annotate(
         row_label,
@@ -168,7 +158,7 @@ legend_patches = [
 ]
 fig.legend(handles=legend_patches, title="$g_{axial}$ quintile",
            loc="lower center", ncol=5, fontsize=10, title_fontsize=10,
-           framealpha=0.9, bbox_to_anchor=(0.52, 0.005))
+           framealpha=0.9, bbox_to_anchor=(0.52, 0.01))
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
