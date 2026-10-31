@@ -3,9 +3,12 @@ plot_fig3_parameter_recovery.py
 
 Figure 3 — Parameter recovery: true vs predicted for all 8 parameters.
 Scenario 1: all 8 parameters unknown (elongation NOT fixed), k=7.
-Layout: 2 rows × 8 columns
-  Row 1: CMA-ES S1MS (k=7)
-  Row 2: TabICL-MS (k=7, all parameters unknown)
+Layout: 4 rows × 4 cols with parameter group separator
+  Rows 0–1: elongation parameters (r_min, r_max, k_e, t_50)
+  Separator row: "Architectural parameters" label
+  Rows 2–3: architectural parameters (θ, g_axial, p_1, p_2)
+  Row 0 / Row 2: CMA-ES (inverse modelling)
+  Row 1 / Row 3: TabICL-MS (ML-based inference)
 """
 
 import os, json
@@ -15,6 +18,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from matplotlib.gridspec import GridSpec
 
 ROOT    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 CALIB   = os.path.join(ROOT, "calibration")
@@ -22,9 +26,11 @@ SBI     = os.path.join(ROOT, "sbi", "data", "combined")
 FIG_OUT = os.path.join(ROOT, "publication", "figures", "fig3_parameter_recovery.png")
 TC_CSV  = os.path.join(CALIB, "test_cases_selected_v2.csv")
 
-ALL_PARAMS = [
+ELONG_PARAMS = [
     "elongation_rate_min", "elongation_rate_max",
     "elongation_logistic_k", "elongation_logistic_t50",
+]
+ARCH_PARAMS = [
     "branch_angle_order1", "g_axial",
     "branching_prob_order1", "branching_prob_order2",
 ]
@@ -57,7 +63,9 @@ def r2_score(tv, pv):
 
 tc = pd.read_csv(TC_CSV)
 
-# CMA-ES S1MS (k=7)
+# ── Load CMA-ES S1MS (k=7) ────────────────────────────────────────────────────
+
+ALL_PARAMS = ELONG_PARAMS + ARCH_PARAMS
 cmae_rows = []
 for _, r in tc.iterrows():
     tag  = f"tc_v2_{r['config']}_{int(r['sample_id'])}_s1ms"
@@ -75,7 +83,8 @@ for _, r in tc.iterrows():
 cmae_df = pd.DataFrame(cmae_rows)
 print(f"CMA-ES S1MS k=7: {len(cmae_df)}")
 
-# TabICL-MS S1 (k=7)
+# ── Load TabICL-MS S1 (k=7) ───────────────────────────────────────────────────
+
 tab_raw = pd.read_csv(os.path.join(SBI, "test_case_eval_multiseed_v2",
                                    "results_tabicl_multiseed_v2.csv"))
 tab_s1  = tab_raw[tab_raw["scenario"] == "Scen1: all unknown"].copy()
@@ -94,60 +103,86 @@ for (sid, cfg), grp in tab_s1.groupby(["sample_id", "config"]):
 tab_df = pd.DataFrame(tab_rows)
 print(f"TabICL-MS S1 k=7: {len(tab_df)}")
 
-ROW_CONFIGS = [
-    (cmae_df, "Inverse modelling  —  Scenario 1, $k$=7"),
-    (tab_df,  "ML-based inference  —  Scenario 1, $k$=7"),
+# ── Layout: GridSpec with 5 rows (spacer at row 2) ───────────────────────────
+# height_ratios: [elong-cmae, elong-tab, spacer, arch-cmae, arch-tab]
+
+fig = plt.figure(figsize=(14, 14))
+# 6-row GridSpec: row 0 = elongation header, rows 1-2 = elongation panels,
+#                 row 3 = architectural header, rows 4-5 = architectural panels
+gs  = GridSpec(6, 4, figure=fig,
+               height_ratios=[0.2, 1, 1, 0.2, 1, 1],
+               hspace=0.55, wspace=0.42,
+               left=0.06, right=0.97, top=0.97, bottom=0.09)
+
+def add_group_header(row, label):
+    ax = fig.add_subplot(gs[row, :])
+    ax.axis("off")
+    ax.text(0.5, 0.5, label,
+            transform=ax.transAxes,
+            ha="center", va="center",
+            fontsize=11, fontweight="bold", color="#333333",
+            bbox=dict(boxstyle="round,pad=0.35", fc="#e8eef5", ec="0.65", lw=1.0))
+
+add_group_header(0, "Elongation parameters")
+add_group_header(3, "Architectural parameters")
+
+# Group header for elongation (above row 0, in figure coords)
+# Placed via the first axis annotation instead of fig.text for simplicity
+
+GROUP_BLOCKS = [
+    (1, ELONG_PARAMS,
+     "Inverse modelling  —  Scenario 1, $k$=7",
+     "ML-based inference  —  Scenario 1, $k$=7"),
+    (4, ARCH_PARAMS,
+     "Inverse modelling  —  Scenario 1, $k$=7",
+     "ML-based inference  —  Scenario 1, $k$=7"),
 ]
 
-# ── Plot 2×8 ──────────────────────────────────────────────────────────────────
+for gs_start, params, cmae_label, tab_label in GROUP_BLOCKS:
+    for method_offset, (df, row_label) in enumerate(
+            [(cmae_df, cmae_label), (tab_df, tab_label)]):
+        gs_row = gs_start + method_offset
 
-fig, axes = plt.subplots(2, 8, figsize=(24, 9.5))
-fig.subplots_adjust(left=0.04, right=0.98, top=0.82, bottom=0.13,
-                    hspace=0.52, wspace=0.42)
+        for col_idx, param in enumerate(params):
+            ax = fig.add_subplot(gs[gs_row, col_idx])
 
-for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
-    for col_idx, param in enumerate(ALL_PARAMS):
-        ax = axes[row_idx, col_idx]
-        true_col, pred_col = f"true_{param}", f"pred_{param}"
+            true_col, pred_col = f"true_{param}", f"pred_{param}"
+            tv = df[true_col].values.astype(float)
+            pv = df[pred_col].values.astype(float)
+            mask = ~(np.isnan(tv) | np.isnan(pv))
 
-        if true_col not in df.columns or pred_col not in df.columns:
-            ax.set_visible(False)
-            continue
+            lo = min(tv[mask].min(), pv[mask].min())
+            hi = max(tv[mask].max(), pv[mask].max())
+            pad = (hi - lo) * 0.08
+            lo, hi = lo - pad, hi + pad
+            ax.plot([lo, hi], [lo, hi], color="0.5", lw=1.0, ls="--", zorder=1)
 
-        tv = df[true_col].values.astype(float)
-        pv = df[pred_col].values.astype(float)
-        mask = ~(np.isnan(tv) | np.isnan(pv))
+            for i, r in df.iterrows():
+                idx = df.index.get_loc(i)
+                if np.isnan(tv[idx]) or np.isnan(pv[idx]):
+                    continue
+                ax.scatter(tv[idx], pv[idx],
+                           color=Q_COLORS.get(r["g_axial_quintile"], "gray"),
+                           edgecolors="0.25", linewidths=0.5, s=50, zorder=3)
 
-        lo = min(tv[mask].min(), pv[mask].min())
-        hi = max(tv[mask].max(), pv[mask].max())
-        pad = (hi - lo) * 0.08
-        lo, hi = lo - pad, hi + pad
-        ax.plot([lo, hi], [lo, hi], color="0.5", lw=1.0, ls="--", zorder=1)
+            r2 = r2_score(tv, pv)
+            ax.set_xlim(lo, hi)
+            ax.set_ylim(lo, hi)
+            ax.set_xlabel("True", fontsize=9.5)
+            ax.set_ylabel("Predicted", fontsize=9.5) if col_idx == 0 else ax.set_ylabel("")
+            ax.tick_params(labelsize=8.5)
+            ax.grid(True, lw=0.35, alpha=0.5)
+            ax.spines["top"].set_visible(False)
+            ax.spines["right"].set_visible(False)
+            ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=11, pad=3)
 
-        for i, r in df.iterrows():
-            idx = df.index.get_loc(i)
-            if np.isnan(tv[idx]) or np.isnan(pv[idx]):
-                continue
-            ax.scatter(tv[idx], pv[idx],
-                       color=Q_COLORS.get(r["g_axial_quintile"], "gray"),
-                       edgecolors="0.25", linewidths=0.5, s=50, zorder=3)
-
-        r2 = r2_score(tv, pv)
-        ax.set_xlim(lo, hi)
-        ax.set_ylim(lo, hi)
-        ax.set_xlabel("True", fontsize=9.5)
-        ax.set_ylabel("Predicted", fontsize=9.5) if col_idx == 0 else ax.set_ylabel("")
-        ax.tick_params(labelsize=8.5)
-        ax.grid(True, lw=0.35, alpha=0.5)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=11, pad=4)
-
-    axes[row_idx, 0].annotate(
-        row_label,
-        xy=(0.0, 1.24), xycoords="axes fraction",
-        fontsize=10.5, fontweight="bold", ha="left", va="bottom",
-        bbox=dict(boxstyle="round,pad=0.28", fc="#eef2f7", ec="0.7", lw=0.8))
+            # Row annotation on leftmost column
+            if col_idx == 0:
+                ax.annotate(
+                    row_label,
+                    xy=(0.0, 1.24), xycoords="axes fraction",
+                    fontsize=10, fontweight="bold", ha="left", va="bottom",
+                    bbox=dict(boxstyle="round,pad=0.28", fc="#eef2f7", ec="0.7", lw=0.8))
 
 # ── Legend ────────────────────────────────────────────────────────────────────
 
