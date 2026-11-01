@@ -98,7 +98,7 @@ for ax, met in zip(axes, METRICS):
     ax.set_title(cfg["title"], fontsize=14, fontweight="bold", pad=8)
     ax.set_xlim(0.5, 15.5)
     ax.tick_params(labelsize=12)
-    ax.grid(axis="y", lw=0.4, alpha=0.5, color="0.75")
+    ax.grid(False)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
