@@ -83,9 +83,9 @@ COLS = [
 
 # ── Plot 3×4 ─────────────────────────────────────────────────────────────────
 
-fig, axes = plt.subplots(3, 4, figsize=(18, 13))
-fig.subplots_adjust(left=0.07, right=0.97, top=0.93, bottom=0.09,
-                    hspace=0.60, wspace=0.40)
+fig, axes = plt.subplots(3, 4, figsize=(22, 16))
+fig.subplots_adjust(left=0.07, right=0.97, top=0.93, bottom=0.08,
+                    hspace=0.75, wspace=0.42)
 
 for row_idx, kcfg in enumerate(K_CONFIGS):
     k = kcfg["k"]
@@ -98,32 +98,32 @@ for row_idx, kcfg in enumerate(K_CONFIGS):
         y = df[met].values
 
         ax.scatter(x, y, c=colors, edgecolors="0.25", linewidths=0.6,
-                   s=55, zorder=3, alpha=0.9)
+                   s=80, zorder=3, alpha=0.9)
         ax.axhline(0, color="0.5", lw=0.8, ls=":", zorder=1)
 
         r, pval = stats.pearsonr(x, y)
         p_str = "p<0.05" if pval < 0.05 else f"p={pval:.2f}"
         ax.text(0.97, 0.05, f"r = {r:+.2f}  ({p_str})",
-                transform=ax.transAxes, ha="right", va="bottom", fontsize=10,
+                transform=ax.transAxes, ha="right", va="bottom", fontsize=12,
                 color="#333333",
-                bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="0.8", alpha=0.8))
+                bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.8", alpha=0.8))
 
-        ax.set_xlabel("CMA-ES final objective ($J_{best}$)", fontsize=11)
+        ax.set_xlabel("CMA-ES final objective ($J_{best}$)", fontsize=13)
         ax.set_ylabel(col_title.split("  ")[1] if col_idx > 0 else col_title.split("  ")[1],
-                      fontsize=11)
-        ax.tick_params(labelsize=10)
+                      fontsize=13)
+        ax.tick_params(labelsize=12)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.grid(axis="both", lw=0.35, alpha=0.45, color="0.75")
 
         title = col_title if row_idx == 0 else col_title.split("  ")[1]
-        ax.set_title(title, fontsize=12, fontweight="bold", pad=6)
+        ax.set_title(title, fontsize=15, fontweight="bold", pad=8)
 
     # Row label: k value
     axes[row_idx, 0].annotate(
         f"$k$ = {k}",
         xy=(-0.26, 0.5), xycoords="axes fraction",
-        fontsize=13, fontweight="bold", ha="center", va="center",
+        fontsize=15, fontweight="bold", ha="center", va="center",
         rotation=90,
         bbox=dict(boxstyle="round,pad=0.3", fc="#eef2f7", ec="0.7", lw=0.8))
 
@@ -132,8 +132,8 @@ for row_idx, kcfg in enumerate(K_CONFIGS):
 cfg_patches = [mpatches.Patch(facecolor=CFG_COLORS[c], edgecolor="0.25",
                                linewidth=0.5, label=f"Config {CFG_LABEL[c]}")
                for c in ["A", "B2", "C", "D2"]]
-fig.legend(handles=cfg_patches, loc="lower center", ncol=4, fontsize=11,
-           framealpha=0.9, bbox_to_anchor=(0.52, 0.01), handlelength=1.2)
+fig.legend(handles=cfg_patches, loc="lower center", ncol=4, fontsize=13,
+           framealpha=0.9, bbox_to_anchor=(0.52, 0.01), handlelength=1.5)
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
