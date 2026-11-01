@@ -115,7 +115,7 @@ for row_idx, kcfg in enumerate(K_CONFIGS):
         ax.tick_params(labelsize=13)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
-        ax.grid(axis="both", lw=0.35, alpha=0.45, color="0.75")
+        ax.grid(False)
 
         if row_idx == 0:
             t = ax.set_title(col_title, fontsize=17, fontweight="bold", pad=10)
