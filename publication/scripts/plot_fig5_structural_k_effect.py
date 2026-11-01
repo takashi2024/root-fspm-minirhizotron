@@ -74,8 +74,8 @@ PANEL = {
 
 # ── Plot ──────────────────────────────────────────────────────────────────────
 
-fig, axes = plt.subplots(1, 2, figsize=(9, 5.2))
-fig.subplots_adjust(left=0.09, right=0.97, top=0.84, bottom=0.26, wspace=0.38)
+fig, axes = plt.subplots(1, 2, figsize=(12, 6.5))
+fig.subplots_adjust(left=0.09, right=0.97, top=0.88, bottom=0.28, wspace=0.38)
 
 x = np.array(K_VALS)
 
@@ -93,11 +93,11 @@ for ax, met in zip(axes, METRICS):
             ax.plot(x, y, zorder=z, **st)
 
     ax.set_xticks(K_VALS)
-    ax.set_xlabel("Number of observation seeds ($k$)", fontsize=10)
-    ax.set_ylabel(cfg["ylabel"], fontsize=10)
-    ax.set_title(cfg["title"], fontsize=10, fontweight="bold", pad=6)
+    ax.set_xlabel("Number of observation seeds ($k$)", fontsize=13)
+    ax.set_ylabel(cfg["ylabel"], fontsize=13)
+    ax.set_title(cfg["title"], fontsize=14, fontweight="bold", pad=8)
     ax.set_xlim(0.5, 15.5)
-    ax.tick_params(labelsize=9)
+    ax.tick_params(labelsize=12)
     ax.grid(axis="y", lw=0.4, alpha=0.5, color="0.75")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -115,7 +115,7 @@ legend_handles = [
            label="Inverse modelling      —  Scenario 2"),
 ]
 fig.legend(handles=legend_handles, loc="lower center",
-           ncol=2, fontsize=9.5, framealpha=0.9,
+           ncol=2, fontsize=12, framealpha=0.9,
            bbox_to_anchor=(0.52, 0.01), columnspacing=1.5, handlelength=2.2)
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
