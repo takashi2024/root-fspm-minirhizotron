@@ -85,7 +85,7 @@ COLS = [
 # ── Plot 3×4 ─────────────────────────────────────────────────────────────────
 
 fig, axes = plt.subplots(3, 4, figsize=(16, 12))
-fig.subplots_adjust(left=0.08, right=0.97, top=0.93, bottom=0.09,
+fig.subplots_adjust(left=0.08, right=0.97, top=0.93, bottom=0.12,
                     hspace=0.55, wspace=0.38)
 
 for row_idx, kcfg in enumerate(K_CONFIGS):
@@ -117,8 +117,9 @@ for row_idx, kcfg in enumerate(K_CONFIGS):
         ax.spines["right"].set_visible(False)
         ax.grid(axis="both", lw=0.35, alpha=0.45, color="0.75")
 
-        title = col_title if row_idx == 0 else col_title.split("  ")[1]
-        ax.set_title(title, fontsize=17, fontweight="bold", pad=8)
+        if row_idx == 0:
+            t = ax.set_title(col_title, fontsize=17, fontweight="bold", pad=10)
+            t.set_bbox(dict(boxstyle="round,pad=0.35", fc="#eef2f7", ec="0.65", lw=1.0))
 
     # Row label: k value
     axes[row_idx, 0].annotate(
@@ -135,7 +136,7 @@ cfg_patches = [Line2D([0], [0], marker="o", color="w",
                       markeredgewidth=0.6, markersize=11, label=f"Config {CFG_LABEL[c]}")
                for c in ["A", "B2", "C", "D2"]]
 fig.legend(handles=cfg_patches, loc="lower center", ncol=4, fontsize=14,
-           frameon=False, bbox_to_anchor=(0.52, 0.01))
+           frameon=False, bbox_to_anchor=(0.52, 0.02))
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
