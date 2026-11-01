@@ -115,7 +115,7 @@ legend_handles = [
            label="Inverse modelling      —  Scenario 2"),
 ]
 fig.legend(handles=legend_handles, loc="lower center",
-           ncol=2, fontsize=12, framealpha=0.9,
+           ncol=2, fontsize=12, frameon=False,
            bbox_to_anchor=(0.52, 0.01), columnspacing=1.5, handlelength=2.2)
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
