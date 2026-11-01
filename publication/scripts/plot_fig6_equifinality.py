@@ -19,6 +19,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from matplotlib.lines import Line2D
 import scipy.stats as stats
 
 ROOT    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
@@ -129,11 +130,12 @@ for row_idx, kcfg in enumerate(K_CONFIGS):
 
 # ── Legend ────────────────────────────────────────────────────────────────────
 
-cfg_patches = [mpatches.Patch(facecolor=CFG_COLORS[c], edgecolor="0.25",
-                               linewidth=0.5, label=f"Config {CFG_LABEL[c]}")
+cfg_patches = [Line2D([0], [0], marker="o", color="w",
+                      markerfacecolor=CFG_COLORS[c], markeredgecolor="0.25",
+                      markeredgewidth=0.6, markersize=11, label=f"Config {CFG_LABEL[c]}")
                for c in ["A", "B2", "C", "D2"]]
 fig.legend(handles=cfg_patches, loc="lower center", ncol=4, fontsize=14,
-           framealpha=0.9, bbox_to_anchor=(0.52, 0.01), handlelength=1.5)
+           frameon=False, bbox_to_anchor=(0.52, 0.01))
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
