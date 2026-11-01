@@ -108,10 +108,6 @@ for row_idx, kcfg in enumerate(K_CONFIGS):
                 color="#333333",
                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="0.8", alpha=0.8))
 
-        m_fit, b_fit = np.polyfit(x, y, 1)
-        xfit = np.linspace(x.min(), x.max(), 100)
-        ax.plot(xfit, m_fit * xfit + b_fit, color="0.6", lw=1.2, ls="--", zorder=2)
-
         ax.set_xlabel("CMA-ES final objective ($J_{best}$)", fontsize=8.5)
         ax.set_ylabel(col_title.split("  ")[1] if col_idx > 0 else col_title.split("  ")[1],
                       fontsize=9)
