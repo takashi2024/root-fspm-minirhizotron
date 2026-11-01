@@ -81,7 +81,7 @@ x = np.array(K_VALS)
 
 for ax, met in zip(axes, METRICS):
     cfg = PANEL[met]
-    ax.axhline(0, color="0.6", lw=0.9, ls=":", zorder=0)
+    ax.axhline(0, color="0.6", lw=0.9, ls=(0, (4, 3)), zorder=0)
     for method in ["CMA-ES", "TabICL-MS"]:
         for scen in SCENARIOS:
             y   = np.array(means[scen][method][met])

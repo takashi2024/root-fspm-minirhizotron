@@ -100,7 +100,7 @@ for row_idx, kcfg in enumerate(K_CONFIGS):
 
         ax.scatter(x, y, c=colors, edgecolors="0.25", linewidths=0.6,
                    s=80, zorder=3, alpha=0.9)
-        ax.axhline(0, color="0.5", lw=0.8, ls=":", zorder=1)
+        ax.axhline(0, color="0.5", lw=0.9, ls=(0, (4, 3)), zorder=1)
 
         r, pval = stats.pearsonr(x, y)
         p_str = "p<0.05" if pval < 0.05 else f"p={pval:.2f}"
