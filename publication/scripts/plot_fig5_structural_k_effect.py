@@ -105,14 +105,14 @@ for ax, met in zip(axes, METRICS):
 # ── Legend ────────────────────────────────────────────────────────────────────
 
 legend_handles = [
-    Line2D([0], [0], color="#1a6faf", ls="-",  lw=2.2, marker="o", ms=7,
-           label="ML-based inference  —  Scenario 2"),
-    Line2D([0], [0], color="#1a6faf", ls="--", lw=1.8, marker="s", ms=6,
-           label="Inverse modelling      —  Scenario 2"),
     Line2D([0], [0], color="#c0392b", ls="-",  lw=2.2, marker="o", ms=7,
            label="ML-based inference  —  Scenario 1"),
     Line2D([0], [0], color="#c0392b", ls="--", lw=1.8, marker="s", ms=6,
            label="Inverse modelling      —  Scenario 1"),
+    Line2D([0], [0], color="#1a6faf", ls="-",  lw=2.2, marker="o", ms=7,
+           label="ML-based inference  —  Scenario 2"),
+    Line2D([0], [0], color="#1a6faf", ls="--", lw=1.8, marker="s", ms=6,
+           label="Inverse modelling      —  Scenario 2"),
 ]
 fig.legend(handles=legend_handles, loc="lower center",
            ncol=2, fontsize=9.5, framealpha=0.9,
