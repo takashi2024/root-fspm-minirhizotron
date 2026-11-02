@@ -125,7 +125,7 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
         ax.set_xlabel("True", fontsize=14)
         ax.set_ylabel("Predicted", fontsize=14) if col_idx == 0 else ax.set_ylabel("")
         ax.tick_params(labelsize=13)
-        ax.grid(True, lw=0.35, alpha=0.5)
+        ax.grid(False)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$ = {r2:+.2f}", fontsize=15, pad=8)
