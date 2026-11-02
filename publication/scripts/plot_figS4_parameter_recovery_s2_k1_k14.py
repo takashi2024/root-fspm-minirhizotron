@@ -30,7 +30,7 @@ TC_CSV  = os.path.join(CALIB, "test_cases_selected_v2.csv")
 ARCH_PARAMS = ["branch_angle_order1", "g_axial",
                "branching_prob_order1", "branching_prob_order2"]
 PARAM_LABELS = {
-    "branch_angle_order1":   "theta",
+    "branch_angle_order1":   "θ",
     "g_axial":               "$g_{axial}$",
     "branching_prob_order1": "$p_1$",
     "branching_prob_order2": "$p_2$",

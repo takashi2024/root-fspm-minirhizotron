@@ -40,7 +40,7 @@ PARAM_LABELS = {
     "elongation_rate_max":    "$r_{max}$",
     "elongation_logistic_k":  "$k_e$",
     "elongation_logistic_t50":"$t_{50}$",
-    "branch_angle_order1":    "theta",
+    "branch_angle_order1":    "θ",
     "g_axial":                "$g_{axial}$",
     "branching_prob_order1":  "$p_1$",
     "branching_prob_order2":  "$p_2$",
