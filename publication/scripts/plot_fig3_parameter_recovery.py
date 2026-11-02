@@ -17,6 +17,7 @@ import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
 from matplotlib.gridspec import GridSpec
@@ -168,6 +169,10 @@ for gs_start, params, cmae_label, tab_label in GROUP_BLOCKS:
             ax.set_xlim(lo, hi)
             ax.set_ylim(lo, hi)
             ax.set_aspect("equal")
+            lct = ticker.MaxNLocator(nbins=4, steps=[1, 2, 2.5, 5, 10])
+            tks = [t for t in lct.tick_values(lo, hi) if lo - 1e-9 <= t <= hi + 1e-9]
+            ax.set_xticks(tks)
+            ax.set_yticks(tks)
             ax.set_xlabel("True", fontsize=14)
             ax.set_ylabel("Predicted", fontsize=14) if col_idx == 0 else ax.set_ylabel("")
             ax.tick_params(labelsize=13)
