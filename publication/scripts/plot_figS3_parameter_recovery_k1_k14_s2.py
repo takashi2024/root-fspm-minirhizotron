@@ -2,9 +2,9 @@
 plot_figS3_parameter_recovery_k1_k14_s2.py
 
 Figure S3 — Parameter recovery at k=1 and k=14, Scenario 2 (4 arch params).
-Layout: 4 rows × 4 cols
-  Rows 0–1: k=1  (CMA-ES, TabICL)
-  Rows 2–3: k=14 (CMA-ES, TabICL)
+Layout: 4 rows x 4 cols
+  Rows 0-1: k=1  (CMA-ES, TabICL)
+  Rows 2-3: k=14 (CMA-ES, TabICL)
 
 Run from project root:
   python3 publication/scripts/plot_figS3_parameter_recovery_k1_k14_s2.py
@@ -17,7 +17,7 @@ import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
+from matplotlib.lines import Line2D
 
 ROOT    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 CALIB   = os.path.join(ROOT, "calibration")
@@ -29,16 +29,14 @@ TC_CSV  = os.path.join(CALIB, "test_cases_selected_v2.csv")
 ARCH_PARAMS = ["branch_angle_order1", "g_axial",
                "branching_prob_order1", "branching_prob_order2"]
 PARAM_LABELS = {
-    "branch_angle_order1":   "θ",
+    "branch_angle_order1":   "theta",
     "g_axial":               "$g_{axial}$",
     "branching_prob_order1": "$p_1$",
     "branching_prob_order2": "$p_2$",
 }
-Q_ORDER  = ["Q1", "Q2", "Q3", "Q4", "Q5"]
-Q_COLORS = {"Q1": "#1a9641", "Q2": "#a6d96a", "Q3": "#ffffbf",
-            "Q4": "#fdae61", "Q5": "#d7191c"}
-Q_LABELS = {"Q1": "Q1 (slow $g_{axial}$)", "Q2": "Q2", "Q3": "Q3",
-            "Q4": "Q4", "Q5": "Q5 (fast $g_{axial}$)"}
+CFG_ORDER  = ["A", "B2", "C", "D2"]
+CFG_COLORS = {"A": "#2166ac", "B2": "#4dac26", "C": "#d01c8b", "D2": "#f1a340"}
+CFG_LABEL  = {"A": "Config A", "B2": "Config B", "C": "Config C", "D2": "Config D"}
 
 K_CONFIGS = [
     {"k": 1,  "cma_suffix": "s2",
@@ -67,8 +65,7 @@ def load_cmae(tc, suffix):
             continue
         with open(path) as f:
             bp = json.load(f)
-        row = {"config": r["config"], "sample_id": int(r["sample_id"]),
-               "g_axial_quintile": r["g_axial_quintile"]}
+        row = {"config": r["config"], "sample_id": int(r["sample_id"])}
         for p in ARCH_PARAMS:
             row[f"true_{p}"] = float(r[p])
             row[f"pred_{p}"] = float(bp[p]) if p in bp else float("nan")
@@ -84,8 +81,7 @@ def load_tabicl(tc, csv_path):
         tc_row = tc[(tc["sample_id"] == int(sid)) & (tc["config"] == cfg)]
         if len(tc_row) == 0:
             continue
-        row = {"config": cfg, "sample_id": int(sid),
-               "g_axial_quintile": tc_row["g_axial_quintile"].values[0]}
+        row = {"config": cfg, "sample_id": int(sid)}
         for p in ARCH_PARAMS:
             prow = grp[grp["parameter"] == p]
             row[f"true_{p}"] = float(prow["true_value"].values[0]) if len(prow) else float("nan")
@@ -102,14 +98,14 @@ for cfg in K_CONFIGS:
     cmae_df = load_cmae(tc, cfg["cma_suffix"])
     tab_df  = load_tabicl(tc, cfg["tab_csv"])
     print(f"k={k}: CMA-ES={len(cmae_df)}, TabICL={len(tab_df)}")
-    ROW_CONFIGS.append((cmae_df, f"Inverse modelling  —  Scenario 2, $k$={k}"))
-    ROW_CONFIGS.append((tab_df,  f"ML-based inference  —  Scenario 2, $k$={k}"))
+    ROW_CONFIGS.append((cmae_df, f"Inverse modelling  --  Scenario 2, $k$={k}"))
+    ROW_CONFIGS.append((tab_df,  f"ML-based inference  --  Scenario 2, $k$={k}"))
 
-# ── Plot 4×4 ──────────────────────────────────────────────────────────────────
+# Plot 4x4
 
 fig, axes = plt.subplots(4, 4, figsize=(14, 17))
-fig.subplots_adjust(left=0.07, right=0.97, top=0.93, bottom=0.07,
-                    hspace=0.55, wspace=0.40)
+fig.subplots_adjust(left=0.07, right=0.97, top=0.93, bottom=0.08,
+                    hspace=0.45, wspace=0.35)
 
 for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
     for col_idx, param in enumerate(ARCH_PARAMS):
@@ -130,37 +126,39 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
             if np.isnan(tv[idx]) or np.isnan(pv[idx]):
                 continue
             ax.scatter(tv[idx], pv[idx],
-                       color=Q_COLORS.get(r["g_axial_quintile"], "gray"),
+                       color=CFG_COLORS.get(r["config"], "gray"),
                        edgecolors="0.25", linewidths=0.5, s=55, zorder=3)
 
         r2 = r2_score(tv, pv)
         ax.set_xlim(lo, hi)
         ax.set_ylim(lo, hi)
-        ax.set_xlabel("True", fontsize=9)
-        ax.set_ylabel("Predicted", fontsize=9) if col_idx == 0 else ax.set_ylabel("")
-        ax.tick_params(labelsize=8)
-        ax.grid(True, lw=0.35, alpha=0.5)
+        ax.set_aspect("equal")
+        ax.set_xlabel("True", fontsize=14)
+        ax.set_ylabel("Predicted", fontsize=14) if col_idx == 0 else ax.set_ylabel("")
+        ax.tick_params(labelsize=13)
+        ax.grid(False)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
-        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=10, pad=4)
+        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$={r2:+.2f}", fontsize=15, pad=4)
 
     axes[row_idx, 0].annotate(
         row_label,
         xy=(0.0, 1.22), xycoords="axes fraction",
-        fontsize=10, fontweight="bold", ha="left", va="bottom",
+        fontsize=14, fontweight="bold", ha="left", va="bottom",
         bbox=dict(boxstyle="round,pad=0.25", fc="#eef2f7", ec="0.7", lw=0.8))
 
-# ── Legend ────────────────────────────────────────────────────────────────────
+# Legend
 
-legend_patches = [
-    mpatches.Patch(facecolor=Q_COLORS[q], edgecolor="0.25",
-                   linewidth=0.5, label=Q_LABELS[q])
-    for q in Q_ORDER
+legend_handles = [
+    Line2D([0], [0], marker="o", color="w",
+           markerfacecolor=CFG_COLORS[c], markeredgecolor="0.25",
+           markeredgewidth=0.6, markersize=11, label=CFG_LABEL[c])
+    for c in CFG_ORDER
 ]
-fig.legend(handles=legend_patches, title="$g_{axial}$ quintile",
-           loc="lower center", ncol=5, fontsize=9.5, title_fontsize=9.5,
-           framealpha=0.9, bbox_to_anchor=(0.52, 0.005))
+fig.legend(handles=legend_handles, title="Planting configuration",
+           loc="lower center", ncol=4, fontsize=13, title_fontsize=13,
+           frameon=False, bbox_to_anchor=(0.52, 0.005))
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
-print(f"Saved → {FIG_OUT}")
+print(f"Saved -> {FIG_OUT}")
