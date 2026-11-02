@@ -173,7 +173,7 @@ for gs_start, params, cmae_label, tab_label in GROUP_BLOCKS:
             tks = [t for t in lct.tick_values(lo, hi) if lo - 1e-9 <= t <= hi + 1e-9]
             ax.set_xticks(tks)
             ax.set_yticks(tks)
-            ax.set_xlabel("True", fontsize=14)
+            ax.set_xlabel("True", fontsize=14) if method_offset == 1 else ax.set_xlabel("")
             ax.set_ylabel("Predicted", fontsize=14) if col_idx == 0 else ax.set_ylabel("")
             ax.tick_params(labelsize=13)
             ax.grid(False)

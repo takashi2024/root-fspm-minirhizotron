@@ -150,7 +150,7 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
         tks = [t for t in lct.tick_values(lo, hi) if lo - 1e-9 <= t <= hi + 1e-9]
         ax.set_xticks(tks)
         ax.set_yticks(tks)
-        ax.set_xlabel("True", fontsize=11)
+        ax.set_xlabel("True", fontsize=11) if row_idx % 2 == 1 else ax.set_xlabel("")
         ax.set_ylabel("Predicted", fontsize=11) if col_idx == 0 else ax.set_ylabel("")
         ax.tick_params(labelsize=10)
         ax.grid(False)
