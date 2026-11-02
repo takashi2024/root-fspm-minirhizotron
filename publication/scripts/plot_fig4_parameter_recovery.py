@@ -15,6 +15,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from matplotlib.lines import Line2D
 
 ROOT    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 CALIB   = os.path.join(ROOT, "calibration")
@@ -30,11 +31,9 @@ PARAM_LABELS = {
     "branching_prob_order1": "$p_1$",
     "branching_prob_order2": "$p_2$",
 }
-Q_ORDER  = ["Q1", "Q2", "Q3", "Q4", "Q5"]
-Q_COLORS = {"Q1": "#1a9641", "Q2": "#a6d96a", "Q3": "#ffffbf",
-            "Q4": "#fdae61", "Q5": "#d7191c"}
-Q_LABELS = {"Q1": "Q1 (slow $g_{axial}$)", "Q2": "Q2", "Q3": "Q3",
-            "Q4": "Q4", "Q5": "Q5 (fast $g_{axial}$)"}
+CFG_ORDER  = ["A", "B2", "C", "D2"]
+CFG_COLORS = {"A": "#2166ac", "B2": "#4dac26", "C": "#d01c8b", "D2": "#f1a340"}
+CFG_LABEL  = {"A": "Config A", "B2": "Config B", "C": "Config C", "D2": "Config D"}
 
 
 def r2_score(tv, pv):
@@ -94,8 +93,8 @@ ROW_CONFIGS = [
 # ── Plot 2×4 ──────────────────────────────────────────────────────────────────
 
 fig, axes = plt.subplots(2, 4, figsize=(14, 10))
-fig.subplots_adjust(left=0.07, right=0.97, top=0.88, bottom=0.12,
-                    hspace=0.70, wspace=0.40)
+fig.subplots_adjust(left=0.07, right=0.97, top=0.88, bottom=0.15,
+                    hspace=0.55, wspace=0.35)
 
 for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
     for col_idx, param in enumerate(ARCH_PARAMS):
@@ -116,36 +115,38 @@ for row_idx, (df, row_label) in enumerate(ROW_CONFIGS):
             if np.isnan(tv[idx]) or np.isnan(pv[idx]):
                 continue
             ax.scatter(tv[idx], pv[idx],
-                       color=Q_COLORS.get(r["g_axial_quintile"], "gray"),
+                       color=CFG_COLORS.get(r["config"], "gray"),
                        edgecolors="0.25", linewidths=0.5, s=55, zorder=3)
 
         r2 = r2_score(tv, pv)
         ax.set_xlim(lo, hi)
         ax.set_ylim(lo, hi)
-        ax.set_xlabel("True", fontsize=11)
-        ax.set_ylabel("Predicted", fontsize=11) if col_idx == 0 else ax.set_ylabel("")
-        ax.tick_params(labelsize=10)
+        ax.set_aspect("equal")
+        ax.set_xlabel("True", fontsize=14)
+        ax.set_ylabel("Predicted", fontsize=14) if col_idx == 0 else ax.set_ylabel("")
+        ax.tick_params(labelsize=13)
         ax.grid(True, lw=0.35, alpha=0.5)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
-        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$ = {r2:+.2f}", fontsize=13, pad=8)
+        ax.set_title(f"{PARAM_LABELS[param]}\n$R^2$ = {r2:+.2f}", fontsize=15, pad=8)
 
     axes[row_idx, 0].annotate(
         row_label,
         xy=(0.0, 1.32), xycoords="axes fraction",
-        fontsize=11, fontweight="bold", ha="left", va="bottom",
+        fontsize=14, fontweight="bold", ha="left", va="bottom",
         bbox=dict(boxstyle="round,pad=0.30", fc="#eef2f7", ec="0.7", lw=0.8))
 
 # ── Legend ────────────────────────────────────────────────────────────────────
 
-legend_patches = [
-    mpatches.Patch(facecolor=Q_COLORS[q], edgecolor="0.25",
-                   linewidth=0.5, label=Q_LABELS[q])
-    for q in Q_ORDER
+legend_handles = [
+    Line2D([0], [0], marker="o", color="w",
+           markerfacecolor=CFG_COLORS[c], markeredgecolor="0.25",
+           markeredgewidth=0.6, markersize=11, label=CFG_LABEL[c])
+    for c in CFG_ORDER
 ]
-fig.legend(handles=legend_patches, title="$g_{axial}$ quintile",
-           loc="lower center", ncol=5, fontsize=11, title_fontsize=11,
-           framealpha=0.9, bbox_to_anchor=(0.52, 0.01))
+fig.legend(handles=legend_handles, title="Planting configuration",
+           loc="lower center", ncol=4, fontsize=13, title_fontsize=13,
+           frameon=False, bbox_to_anchor=(0.52, 0.01))
 
 os.makedirs(os.path.dirname(FIG_OUT), exist_ok=True)
 fig.savefig(FIG_OUT, dpi=180, bbox_inches="tight", facecolor="white")
