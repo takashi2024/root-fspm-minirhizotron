@@ -69,7 +69,7 @@ STYLE = {
 
 PANEL = {
     "ss_rld_3d":   dict(ylabel="SS$_{\\mathrm{RLD}}$",   title="Root length density"),
-    "ss_angle_3d": dict(ylabel="SS$_{\\mathrm{angle}}$", title="Crossing angle"),
+    "ss_angle_3d": dict(ylabel="SS$_{\\mathrm{incl}}$", title="Root inclination"),
 }
 
 # ── Plot ──────────────────────────────────────────────────────────────────────

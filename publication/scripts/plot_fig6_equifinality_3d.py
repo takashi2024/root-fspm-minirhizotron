@@ -79,9 +79,9 @@ K_CONFIGS = [
 # Cols: S1 SS_RLD_3d, S1 SS_angle_3d, S2 SS_RLD_3d, S2 SS_angle_3d
 COLS = [
     ("s1", "ss_rld_3d",   "S1  SS$_{\\mathrm{RLD}}$"),
-    ("s1", "ss_angle_3d", "S1  SS$_{\\mathrm{angle}}$"),
+    ("s1", "ss_angle_3d", "S1  SS$_{\\mathrm{incl}}$"),
     ("s2", "ss_rld_3d",   "S2  SS$_{\\mathrm{RLD}}$"),
-    ("s2", "ss_angle_3d", "S2  SS$_{\\mathrm{angle}}$"),
+    ("s2", "ss_angle_3d", "S2  SS$_{\\mathrm{incl}}$"),
 ]
 
 # ── Plot 3×4 ─────────────────────────────────────────────────────────────────
