@@ -25,19 +25,19 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 ROOT     = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
-SBI_DATA = os.path.join(ROOT, "sbi", "data", "multi_seed")
+SBI_DATA = "/Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/data/multi_seed_v2"
 FIG_OUT  = os.path.join(ROOT, "publication", "figures", "figS2_seed_convergence.png")
 
 CONFIGS  = ["A", "B2", "C", "D2"]
-CHANNELS = ["Root length", "Root presence", "Crossing angle"]
-K        = 20
-K_SHOW   = [1, 7, 14, 20]   # tick marks to annotate
+CHANNELS = ["Root length", "Root presence", "Root inclination"]
+K        = 14
+K_SHOW   = [1, 7, 14]   # tick marks to annotate
 
 # ── Load data ─────────────────────────────────────────────────────────────────
 
 all_X, all_meta = [], []
 for cfg in CONFIGS:
-    p = os.path.join(SBI_DATA, f"config_{cfg}", "tensors_k20", "X_raw.npz")
+    p = os.path.join(SBI_DATA, f"config_{cfg}", "tensors_k14", "X_raw.npz")
     X = np.load(p)["X"]                                        # (N, K, T, ns, na, nc)
     df = pd.read_csv(os.path.join(SBI_DATA, f"config_{cfg}", "samples_filtered.csv"))
     df["config"] = cfg
@@ -78,9 +78,9 @@ else:
 # ── Plot ──────────────────────────────────────────────────────────────────────
 
 CHAN_COLORS = {
-    "Root length":  "#1a6faf",
-    "Root presence": "#2ca02c",
-    "Crossing angle": "#d62728",
+    "Root length":     "#1a6faf",
+    "Root presence":   "#2ca02c",
+    "Root inclination": "#d62728",
 }
 Q_COLORS = {
     "Q1": "#1a9641", "Q2": "#a6d96a", "Q3": "#ffffbf", "Q4": "#fdae61", "Q5": "#d7191c"
@@ -136,7 +136,7 @@ legend_handles = [Line2D([0], [0], color=CHAN_COLORS[c], lw=2.0, label=c)
                   for c in CHANNELS]
 legend_handles += [
     matplotlib.patches.Patch(facecolor="0.6", alpha=0.28, label="P25–P75 band"),
-    Line2D([0], [0], color="0.5", lw=1.5, ls="--", label="Extrapolation (k>20)"),
+    Line2D([0], [0], color="0.5", lw=1.5, ls="--", label="Extrapolation (k>14)"),
 ]
 ax.legend(handles=legend_handles, fontsize=8, loc="upper right",
           framealpha=0.9, handlelength=1.5)
