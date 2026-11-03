@@ -120,7 +120,8 @@ skill(r, r0) = (isnan(r) || isnan(r0) || r0 < 1e-12) ? NaN : 1.0 - r / r0
 
 # ── Simulation + extraction ────────────────────────────────────────────────────
 
-function run_sim_extract(env_json_path, species_json_path, seed, nx, nz, box_W, box_H, tmp_dir)
+function run_sim_extract(env_json_path, species_json_path, seed, nx, ny, nz,
+                         box_W, box_D, box_H, tmp_dir)
     runid  = string("ms", seed, "_", abs(hash(species_json_path * string(seed))) % 10^9)
     outdir = joinpath(tmp_dir, runid)
     mkpath(outdir)
@@ -148,9 +149,15 @@ function run_sim_extract(env_json_path, species_json_path, seed, nx, nz, box_W, 
         end
     end
 
-    rld_acc  = zeros(nx, nz)
-    awsum    = zeros(nx, nz)
-    alen     = zeros(nx, nz)
+    # 2-D grid (x–z, y collapsed) — commented out; 3-D grid is now primary
+    # rld_acc  = zeros(nx, nz)
+    # awsum    = zeros(nx, nz)
+    # alen     = zeros(nx, nz)
+
+    # 3-D voxel grid (x–y–z, y = along-row direction)
+    rld3d    = zeros(nx, ny, nz)
+    aws3d    = zeros(nx, ny, nz)
+    alen3d   = zeros(nx, ny, nz)
 
     for pl in cfg.plants
         for seg in pl.root.segments
@@ -159,46 +166,77 @@ function run_sim_extract(env_json_path, species_json_path, seed, nx, nz, box_W, 
             dl > 1e-9 || continue
             mid = (seg.p0 .+ seg.p1) .* 0.5
             ix = clamp(floor(Int, (mid[1] + box_W * 0.5) / VOXEL_CM) + 1, 1, nx)
+            iy = clamp(floor(Int,  mid[2]                / VOXEL_CM) + 1, 1, ny)
             iz = clamp(floor(Int, (-mid[3])              / VOXEL_CM) + 1, 1, nz)
-            rld_acc[ix, iz] += dl
             dir_z = dp[3] / dl
             θ = acos(clamp(abs(dir_z), 0.0, 1.0)) * 180.0 / π
-            awsum[ix, iz]   += θ * dl
-            alen[ix, iz]    += dl
+            # rld_acc[ix, iz]     += dl   # 2-D (commented out)
+            # awsum[ix, iz]       += θ * dl
+            # alen[ix, iz]        += dl
+            rld3d[ix, iy, iz]   += dl
+            aws3d[ix, iy, iz]   += θ * dl
+            alen3d[ix, iy, iz]  += dl
         end
     end
 
     rm(outdir; recursive=true, force=true)
 
-    ang = fill(NaN, nx, nz)
-    for i in 1:nx, j in 1:nz
-        alen[i, j] > RLD_THRESH && (ang[i, j] = awsum[i, j] / alen[i, j])
-    end
-    rld_acc, ang
+    # ang = fill(NaN, nx, nz)   # 2-D (commented out)
+    # for i in 1:nx, j in 1:nz
+    #     alen[i, j] > RLD_THRESH && (ang[i, j] = awsum[i, j] / alen[i, j])
+    # end
+
+    ang3d = fill(NaN, nx, ny, nz)
+    mask3 = alen3d .> RLD_THRESH
+    ang3d[mask3] .= aws3d[mask3] ./ alen3d[mask3]
+
+    rld3d, ang3d
 end
 
 # ── Accumulator ───────────────────────────────────────────────────────────────
 
-mutable struct Acc
-    rld  ::Matrix{Float64}
-    aws  ::Matrix{Float64}
-    alen ::Matrix{Float64}
-end
-Acc(nx, nz) = Acc(zeros(nx,nz), zeros(nx,nz), zeros(nx,nz))
+# 2-D Acc struct commented out — 3-D Acc3 is now primary
+# mutable struct Acc
+#     rld  ::Matrix{Float64}
+#     aws  ::Matrix{Float64}
+#     alen ::Matrix{Float64}
+# end
+# Acc(nx, nz) = Acc(zeros(nx,nz), zeros(nx,nz), zeros(nx,nz))
+# function update!(a::Acc, rld, ang)
+#     a.rld .+= rld
+#     for i in 1:size(rld,1), j in 1:size(rld,2)
+#         !isnan(ang[i,j]) && (a.aws[i,j] += ang[i,j]*rld[i,j]; a.alen[i,j] += rld[i,j])
+#     end
+# end
+# function finalise(a::Acc, K)
+#     mr = a.rld ./ K
+#     ma = fill(NaN, size(mr)...)
+#     for i in 1:size(mr,1), j in 1:size(mr,2)
+#         a.alen[i,j] > RLD_THRESH && (ma[i,j] = a.aws[i,j] / a.alen[i,j])
+#     end
+#     mr, ma
+# end
 
-function update!(a::Acc, rld, ang)
-    a.rld .+= rld
-    for i in 1:size(rld,1), j in 1:size(rld,2)
-        !isnan(ang[i,j]) && (a.aws[i,j] += ang[i,j]*rld[i,j]; a.alen[i,j] += rld[i,j])
-    end
+# 3-D accumulator (x–y–z voxel grid)
+mutable struct Acc3
+    rld  ::Array{Float64, 3}
+    aws  ::Array{Float64, 3}
+    alen ::Array{Float64, 3}
+end
+Acc3(nx, ny, nz) = Acc3(zeros(nx,ny,nz), zeros(nx,ny,nz), zeros(nx,ny,nz))
+
+function update!(a::Acc3, rld3, ang3)
+    a.rld .+= rld3
+    mask = .!isnan.(ang3)
+    a.aws[mask]  .+= ang3[mask] .* rld3[mask]
+    a.alen[mask] .+= rld3[mask]
 end
 
-function finalise(a::Acc, K)
+function finalise(a::Acc3, K)
     mr = a.rld ./ K
     ma = fill(NaN, size(mr)...)
-    for i in 1:size(mr,1), j in 1:size(mr,2)
-        a.alen[i,j] > RLD_THRESH && (ma[i,j] = a.aws[i,j] / a.alen[i,j])
-    end
+    mask = a.alen .> RLD_THRESH
+    ma[mask] .= a.aws[mask] ./ a.alen[mask]
     mr, ma
 end
 
@@ -289,8 +327,10 @@ for row in rows_to_process
 
     env_raw = _read_json(env_json)
     box_W   = Float64(env_raw["rhizobox"]["W"])
+    box_D   = Float64(env_raw["rhizobox"]["D"])
     box_H   = Float64(env_raw["rhizobox"]["H"])
     nx      = ceil(Int, box_W / VOXEL_CM)
+    ny      = ceil(Int, box_D / VOXEL_CM)
     nz      = ceil(Int, box_H / VOXEL_CM)
 
     # True params (all 8 from test_cases_selected.csv)
@@ -322,7 +362,7 @@ for row in rows_to_process
     _write_candidate_VD_json(warmstart_path, tab_spe, θ_tab;
         param_names=MC.param_names, n_axial_roots=1, max_order1_per_plant=20)
 
-    @printf("\n[%s] %d×%d voxels  %d seeds\n", tag, nx, nz, length(seeds))
+    @printf("\n[%s] %d×%d×%d voxels  %d seeds\n", tag, nx, ny, nz, length(seeds))
     if is_s2
         @printf("  TRUE:  angle=%.1f  g=%.4f  bp1=%.3f  bp2=%.3f\n",
                 θ_true_arch[1], θ_true_arch[2], θ_true_arch[3], θ_true_arch[4])
@@ -347,50 +387,56 @@ for row in rows_to_process
     end
     flush(stdout)
 
-    acc_t = Acc(nx, nz); acc_c = Acc(nx, nz); acc_b = Acc(nx, nz)
+    # acc_t  = Acc(nx, nz);  acc_c  = Acc(nx, nz);  acc_b  = Acc(nx, nz)   # 2-D (commented out)
+    acc3_t = Acc3(nx, ny, nz); acc3_c = Acc3(nx, ny, nz); acc3_b = Acc3(nx, ny, nz)
 
     for (si, seed) in enumerate(seeds)
         @printf("  seed %d (%d/%d)\r", seed, si, length(seeds)); flush(stdout)
-        rld_t, ang_t = run_sim_extract(env_json, true_spe, seed, nx, nz, box_W, box_H, tmp_dir)
-        rld_c, ang_c = run_sim_extract(env_json, cal_spe,  seed, nx, nz, box_W, box_H, tmp_dir)
-        rld_b, ang_b = run_sim_extract(env_json, tab_spe,  seed, nx, nz, box_W, box_H, tmp_dir)
-        update!(acc_t, rld_t, ang_t)
-        update!(acc_c, rld_c, ang_c)
-        update!(acc_b, rld_b, ang_b)
+        rld3_t, ang3_t = run_sim_extract(env_json, true_spe, seed, nx, ny, nz, box_W, box_D, box_H, tmp_dir)
+        rld3_c, ang3_c = run_sim_extract(env_json, cal_spe,  seed, nx, ny, nz, box_W, box_D, box_H, tmp_dir)
+        rld3_b, ang3_b = run_sim_extract(env_json, tab_spe,  seed, nx, ny, nz, box_W, box_D, box_H, tmp_dir)
+        update!(acc3_t, rld3_t, ang3_t)
+        update!(acc3_c, rld3_c, ang3_c)
+        update!(acc3_b, rld3_b, ang3_b)
     end
     println()
 
     rm(tmp_dir; recursive=true, force=true)
 
     K = length(seeds)
-    mr_t, ma_t = finalise(acc_t, K)
-    mr_c, ma_c = finalise(acc_c, K)
-    mr_b, ma_b = finalise(acc_b, K)
+    # mr_t,  ma_t  = finalise(acc_t,  K)   # 2-D (commented out)
+    # mr_c,  ma_c  = finalise(acc_c,  K)
+    # mr_b,  ma_b  = finalise(acc_b,  K)
+    mr3_t, ma3_t = finalise(acc3_t, K)
+    mr3_c, ma3_c = finalise(acc3_c, K)
+    mr3_b, ma3_b = finalise(acc3_b, K)
 
-    ss_rld_c, ss_ang_c, nocc_c = metrics(mr_c, ma_c, mr_t, ma_t)
-    ss_rld_b, ss_ang_b, nocc_b = metrics(mr_b, ma_b, mr_t, ma_t)
-    nocc_t = sum(mr_t .> RLD_THRESH)
+    # ss_rld_c,  ss_ang_c,  nocc_c = metrics(mr_c,  ma_c,  mr_t,  ma_t)   # 2-D (commented out)
+    # ss_rld_b,  ss_ang_b,  nocc_b = metrics(mr_b,  ma_b,  mr_t,  ma_t)
+    ss_rld3_c, ss_ang3_c, nocc_c = metrics(mr3_c, ma3_c, mr3_t, ma3_t)
+    ss_rld3_b, ss_ang3_b, nocc_b = metrics(mr3_b, ma3_b, mr3_t, ma3_t)
+    nocc_t = sum(mr3_t .> RLD_THRESH)
 
-    @printf("  %s: SS_rld=%+.3f  SS_ang=%+.3f\n",
-            MC.cmae_method, ss_rld_c, ss_ang_c)
-    @printf("  %s: SS_rld=%+.3f  SS_ang=%+.3f\n",
-            MC.tabicl_method, ss_rld_b, ss_ang_b)
+    @printf("  %s: SS_rld_3d=%+.3f  SS_ang_3d=%+.3f\n",
+            MC.cmae_method, ss_rld3_c, ss_ang3_c)
+    @printf("  %s: SS_rld_3d=%+.3f  SS_ang_3d=%+.3f\n",
+            MC.tabicl_method, ss_rld3_b, ss_ang3_b)
 
     # Arch-params display values (always 4, regardless of scenario)
     arch_c = is_s2 ? θ_cal : θ_cal[5:8]
     arch_b = is_s2 ? θ_tab : θ_tab[5:8]
 
     new_rows = []
-    for (method, ss_r, ss_a, nocc, arch_θ) in [
-            (MC.cmae_method,   ss_rld_c, ss_ang_c, nocc_c, arch_c),
-            (MC.tabicl_method, ss_rld_b, ss_ang_b, nocc_b, arch_b),
+    for (method, ss_r3, ss_a3, nocc, arch_θ) in [
+            (MC.cmae_method,   ss_rld3_c, ss_ang3_c, nocc_c, arch_c),
+            (MC.tabicl_method, ss_rld3_b, ss_ang3_b, nocc_b, arch_b),
         ]
         push!(new_rows, (
             method=method, config=cfg_name, sample_id=sample_id,
             g_axial_quintile=row.g_axial_quintile,
             true_g_axial=Float64(row.g_axial),
             windows_with_roots=row.windows_with_roots,
-            ss_rld=ss_r, ss_angle=ss_a,
+            ss_rld_3d=ss_r3, ss_angle_3d=ss_a3,
             n_occ_true=nocc_t, n_occ_pred=nocc,
             pred_branch_angle=arch_θ[1], pred_g_axial=arch_θ[2],
             pred_bp1=arch_θ[3], pred_bp2=arch_θ[4],
@@ -418,22 +464,22 @@ else
     @printf("Structural Similarity — %s vs %s (N=%d)\n",
             MC.cmae_method, MC.tabicl_method, n_cases)
     println("="^62)
-    @printf("  %-18s  %-4s  %4s  %2s  %8s  %8s\n",
-            "Method","cfg","#","Q","SS_rld","SS_ang")
-    println("-"^62)
+    @printf("  %-18s  %-4s  %4s  %2s  %10s  %10s\n",
+            "Method","cfg","#","Q","SS_rld_3d","SS_ang_3d")
+    println("-"^66)
     for r in eachrow(df_out)
-        @printf("  %-18s  %-4s  %4d  %2s  %+8.3f  %+8.3f\n",
+        @printf("  %-18s  %-4s  %4d  %2s  %+10.3f  %+10.3f\n",
                 r.method, r.config, r.sample_id, r.g_axial_quintile,
-                r.ss_rld, r.ss_angle)
+                r.ss_rld_3d, r.ss_angle_3d)
     end
-    println("-"^62)
+    println("-"^66)
     println("\nMethod means:")
     for method in [MC.cmae_method, MC.tabicl_method]
         sub = filter(r -> r.method == method, eachrow(df_out))
         isempty(sub) && continue
-        ss_r = mean(filter(!isnan, [r.ss_rld  for r in sub]))
-        ss_a = mean(filter(!isnan, [r.ss_angle for r in sub]))
-        @printf("  %-18s  SS_rld=%+.3f  SS_angle=%+.3f\n",
-                method, ss_r, ss_a)
+        ss_r3 = mean(filter(!isnan, [r.ss_rld_3d    for r in sub]))
+        ss_a3 = mean(filter(!isnan, [r.ss_angle_3d  for r in sub]))
+        @printf("  %-18s  SS_rld_3d=%+.3f  SS_angle_3d=%+.3f\n",
+                method, ss_r3, ss_a3)
     end
 end

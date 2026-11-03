@@ -43,7 +43,7 @@ CSV_MAP = {
 K_VALS    = [1, 7, 14]
 SCENARIOS = ["S2", "S1"]
 METHODS   = ["CMA-ES", "TabICL-MS"]
-METRICS   = ["ss_rld", "ss_angle"]
+METRICS   = ["ss_rld_3d", "ss_angle_3d"]
 
 means = {s: {m: {met: [] for met in METRICS} for m in METHODS} for s in SCENARIOS}
 stds  = {s: {m: {met: [] for met in METRICS} for m in METHODS} for s in SCENARIOS}
@@ -68,8 +68,8 @@ STYLE = {
 }
 
 PANEL = {
-    "ss_rld":   dict(ylabel="SS$_{\\mathrm{RLD}}$",   title="Root length density"),
-    "ss_angle": dict(ylabel="SS$_{\\mathrm{angle}}$", title="Crossing angle"),
+    "ss_rld_3d":   dict(ylabel="SS$_{\\mathrm{RLD}}$",   title="Root length density"),
+    "ss_angle_3d": dict(ylabel="SS$_{\\mathrm{angle}}$", title="Crossing angle"),
 }
 
 # ── Plot ──────────────────────────────────────────────────────────────────────

@@ -55,7 +55,7 @@ def build_dataset(suffix, csv_name, method_name):
     J_df   = load_J(suffix)
     struct = load_struct(csv_name, method_name)
     merged = pd.merge(J_df, struct, on=["config", "sample_id"])
-    merged = merged.dropna(subset=["best_J", "ss_rld", "ss_angle"])
+    merged = merged.dropna(subset=["best_J", "ss_rld_3d", "ss_angle_3d"])
     print(f"  {suffix}: {len(merged)} cases")
     return merged
 
@@ -76,10 +76,10 @@ K_CONFIGS = [
 
 # Cols: S1 SS_RLD, S1 SS_angle, S2 SS_RLD, S2 SS_angle
 COLS = [
-    ("s1", "ss_rld",   "S1  SS$_{\\mathrm{RLD}}$"),
-    ("s1", "ss_angle", "S1  SS$_{\\mathrm{angle}}$"),
-    ("s2", "ss_rld",   "S2  SS$_{\\mathrm{RLD}}$"),
-    ("s2", "ss_angle", "S2  SS$_{\\mathrm{angle}}$"),
+    ("s1", "ss_rld_3d",   "S1  SS$_{\\mathrm{RLD}}$"),
+    ("s1", "ss_angle_3d", "S1  SS$_{\\mathrm{angle}}$"),
+    ("s2", "ss_rld_3d",   "S2  SS$_{\\mathrm{RLD}}$"),
+    ("s2", "ss_angle_3d", "S2  SS$_{\\mathrm{angle}}$"),
 ]
 
 # ── Plot 3×4 ─────────────────────────────────────────────────────────────────
