@@ -20,7 +20,7 @@ calibration/ml_struct_tmp_*/
 sbi/data/multi_seed_v2/config_*/tensors/
 sbi/data/multi_seed_v2/config_*/per_sample/
 sbi/data/multi_seed_v2/config_*/per_sample_ext/
-sbi/data/multi_seed_v2/config_*/tensors_k14/
+# tensors_k14 tracked — needed for Fig S2 reproduction (each npz ~34 MB)
 
 # Archived v1 SBI data
 sbi/data/v1/

@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 ROOT     = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
-SBI_DATA = "/Users/takashi/LocalAnalysis/Root FSPM Minirhizotron/main/sbi/data/multi_seed_v2"
+SBI_DATA = os.path.join(ROOT, "sbi", "data", "multi_seed_v2")
 FIG_OUT  = os.path.join(ROOT, "publication", "figures", "figS2_seed_convergence.png")
 
 CONFIGS  = ["A", "B2", "C", "D2"]
