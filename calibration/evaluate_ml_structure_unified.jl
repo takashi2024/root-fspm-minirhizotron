@@ -190,6 +190,7 @@ function run_sim_extract(env_json_path, species_json_path, seed, nx, ny, nz,
     mask3 = alen3d .> RLD_THRESH
     ang3d[mask3] .= aws3d[mask3] ./ alen3d[mask3]
 
+    rld3d ./= (VOXEL_CM^3)   # convert cm → cm cm⁻³ (voxel volume = 5³ = 125 cm³)
     rld3d, ang3d
 end
 
