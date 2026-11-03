@@ -110,8 +110,7 @@ ax_long.legend(handles=[
     plt.Line2D([0],[0], color=TUBE_C, lw=1.0, ls="--", alpha=0.6, label="Tube walls (±3 cm)"),
     plt.Line2D([0],[0], color=SURF_C, marker="o", ms=6, lw=0, label="Plant rows (projected)"),
 ], fontsize=15, loc="lower right", framealpha=0.9)
-ax_long.set_title("(a)  Tube geometry — longitudinal section",
-                  fontsize=17, fontweight="bold", pad=6, loc="left")
+# title placed below via fig.text at a shared y level
 
 # ── (b) Azimuth cross-section ─────────────────────────────────────────────────
 
@@ -179,8 +178,23 @@ for mpl_deg, lbl, fc, tc in AZ_WINS:
     ax_azim.text(text_r * np.cos(mid_rad), text_r * np.sin(mid_rad),
                  AZ_TEXT[mpl_deg][0], ha=ha, va=va,
                  fontsize=15, color=tc, fontweight="bold", zorder=6)
-ax_azim.set_title("(b)  Tube cross-section — azimuth windows",
-                  fontsize=17, fontweight="bold", pad=6, loc="left")
+# title placed below via fig.text at a shared y level
+
+# ── Shared-height titles (align to the taller axis top) ──────────────────────
+
+fig.canvas.draw()
+pos_a = ax_long.get_position()
+pos_b = ax_azim.get_position()
+title_y = max(pos_a.y1, pos_b.y1) + 0.012
+
+fig.text(pos_a.x0, title_y,
+         "(a)  Tube geometry — longitudinal section",
+         fontsize=17, fontweight="bold", va="bottom", ha="left",
+         transform=fig.transFigure)
+fig.text(pos_b.x0, title_y,
+         "(b)  Tube cross-section — azimuth windows",
+         fontsize=17, fontweight="bold", va="bottom", ha="left",
+         transform=fig.transFigure)
 
 # ── Save ─────────────────────────────────────────────────────────────────────
 
